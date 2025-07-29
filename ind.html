@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Poemas y Reflexiones</title>
+		<style>
+			:root {
+				--bg-color: #fdf6f0;
+				--text-color: #333;
+				--accent-color: #c88e56;
+				--card-bg: #fff;
+				--font-main: "Georgia", serif;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: var(--font-main);
+				background-color: var(--bg-color);
+				color: var(--text-color);
+				padding: 1rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+
+			header {
+				text-align: center;
+				margin-bottom: 2rem;
+			}
+
+			header h1 {
+				font-size: 2.5rem;
+				color: var(--accent-color);
+			}
+
+			.poema-container {
+				max-width: 800px;
+				width: 100%; /* Asegura que no se desborde en móviles */
+				background-color: var(--card-bg);
+				padding: 1.5rem;
+				border-radius: 12px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				margin-bottom: 2rem;
+				overflow-x: auto; /* Previene empalmes horizontales */
+			}
+
+			.poema-container h2 {
+				font-size: 1.5rem;
+				margin-bottom: 1rem;
+				color: var(--accent-color);
+			}
+
+			.poema-container .autor {
+				font-size: 1rem;
+				font-style: italic;
+				color: #555;
+				margin-bottom: 1rem;
+				text-align: right;
+			}
+
+			.poema-container p {
+				white-space: pre-line;
+				line-height: 1.8;
+				margin-bottom: 1rem;
+			}
+
+			.poema-container pre {
+				white-space: pre-wrap; /* Mantiene estructura de texto y se ajusta al contenedor */
+				font-family: var(--font-main);
+				line-height: 1.8;
+				margin-bottom: 1rem;
+			}
+
+			footer {
+				margin-top: 3rem;
+				font-size: 0.9rem;
+				color: #666;
+			}
+
+			@media (max-width: 600px) {
+				header h1 {
+					font-size: 2rem;
+				}
+
+				.poema-container {
+					padding: 1rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>Poemas y Reflexiones</h1>
+			<p>Un espacio para el alma</p>
+		</header>
+
+		<div class="poema-container">
+			<h2>Amanecer</h2>
+			<div class="autor">por María López</div>
+			<pre>
+                Al despuntar la aurora clara,
+                se mece el viento entre la flor,
+                y el mundo entero se prepara
+                para una nueva danza de color.
+
+                El sol despierta con ternura,
+                sus rayos doran el dolor,
+                y en la quietud de la llanura
+                renace suave el viejo amor.
+    </pre
+			>
+		</div>
+
+		<footer>&copy; 2025 Poemas y Reflexiones. Todos los derechos reservados.</footer>
+	</body>
+</html>
