@@ -48,6 +48,7 @@
 				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 				margin-bottom: 2rem;
 				overflow-x: auto; /**/
+				position: relative; /*corazon ultimo*/
 			}
 
 			.poema-container h2 {
@@ -80,6 +81,22 @@
 				margin-top: 3rem;
 				font-size: 0.9rem;
 				color: #666;
+			}
+			.corazon {
+				/*corazon ultimo*/
+				font-size: 24px;
+				color: gray;
+				cursor: pointer;
+				position: absolute;
+				top: 15px;
+				right: 15px;
+				transition: transform 0.2s ease, color 0.3s ease;
+			}
+
+			.corazon.leido {
+				/*corazon ultimo*/
+				color: red;
+				transform: scale(1.2);
 			}
 
 			@media (max-width: 600px) {
@@ -175,6 +192,7 @@ solo un alma en silencio, devolviéndose al vuelo.
 				duración, sino en instantes con sentido.
 			</p>
 			<div class="autor">Autor: IF- (11/12/23)(29/07/25)</div>
+			<span class="corazon" data-id="instantesconsentido">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -190,6 +208,7 @@ Lo material puede hacernos sentir cómodos, pero solo lo esencial nos hace senti
 </pre
 			>
 			<div class="autor">Autor: IF- (08/10/22)</div>
+			<span class="corazon" data-id="vacio">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -232,6 +251,7 @@ pues bastan en su esencia, con tan solo existir… para permanecer.
 </pre
 			>
 			<div class="autor">Autor: IF- (01/08/24)</div>
+			<span class="corazon" data-id="lad">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -357,6 +377,7 @@ tu nombre será la semilla que siempre en mi pecho brotará.
 			</pre
 			>
 			<div class="autor">Autor: IF- (--/--/--)</div>
+			<span class="corazon" data-id="inicioyfinal">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -385,6 +406,7 @@ y el alma guardaba sus fuegos temiendo romper el jardín.
 			</pre
 			>
 			<div class="autor">Autor: IF- (17/12/18)</div>
+			<span class="corazon" data-id="silencio">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -413,6 +435,7 @@ esperaré en la sombra, hasta que tu risa regrese, encendida.
 			</pre
 			>
 			<div class="autor">Autor: IF- (2020)</div>
+			<span class="corazon" data-id="sintitulo">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -442,6 +465,7 @@ y supe que el tiempo contigo sería mi forma de ser.
 			</pre
 			>
 			<div class="autor">Autor: IF-</div>
+			<span class="corazon" data-id="Comienzo">&#10084;</span>
 		</div>
 		<div class="poema-container">
 			<h2>Despertar</h2>
@@ -471,6 +495,7 @@ serás en mis días la llama que nunca se quiere extinguir.
 			</pre
 			>
 			<div class="autor">Autor: IF-</div>
+			<span class="corazon" data-id="Despertar">&#10084;</span>
 		</div>
 
 		<div class="poema-container">
@@ -480,5 +505,26 @@ serás en mis días la llama que nunca se quiere extinguir.
 		</div>
 
 		<footer>&copy; 2025 Literalia. Todos los derechos reservados.</footer>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const corazones = document.querySelectorAll(".corazon");
+
+				corazones.forEach((corazon) => {
+					const id = corazon.dataset.id;
+
+					// Verificar si está marcado como leído
+					if (localStorage.getItem(`leido_${id}`) === "true") {
+						corazon.classList.add("leido");
+					}
+
+					// Evento click para marcar/desmarcar
+					corazon.addEventListener("click", () => {
+						corazon.classList.toggle("leido");
+						localStorage.setItem(`leido_${id}`, corazon.classList.contains("leido"));
+					});
+				});
+			});
+		</script>
 	</body>
 </html>
