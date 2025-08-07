@@ -85,7 +85,7 @@
 			.corazon {
 				/*corazon ultimo*/
 				font-size: 24px;
-				color: gray;
+				color: gray !important;
 				cursor: pointer;
 				position: absolute;
 				top: 15px;
@@ -95,7 +95,7 @@
 
 			.corazon.leido {
 				/*corazon ultimo*/
-				color: red;
+				color: red !important;
 				transform: scale(1.2);
 			}
 
@@ -513,12 +513,13 @@ serás en mis días la llama que nunca se quiere extinguir.
 				corazones.forEach((corazon) => {
 					const id = corazon.dataset.id;
 
-					// Verificar si está marcado como leído
+					// Sólo aplicamos "leído" si está guardado en localStorage
 					if (localStorage.getItem(`leido_${id}`) === "true") {
 						corazon.classList.add("leido");
+					} else {
+						corazon.classList.remove("leido"); // Aseguramos que empiece gris
 					}
 
-					// Evento click para marcar/desmarcar
 					corazon.addEventListener("click", () => {
 						corazon.classList.toggle("leido");
 						localStorage.setItem(`leido_${id}`, corazon.classList.contains("leido"));
