@@ -1,122 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Poemas y Reflexiones</title>
-		<style>
-			:root {
-				--bg-color: #fdf6f0;
-				--text-color: #333;
-				--accent-color: #c88e56;
-				--card-bg: #fff;
-				--font-main: "Georgia", serif;
-			}
-
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-
-			body {
-				font-family: var(--font-main);
-				background-color: var(--bg-color);
-				color: var(--text-color);
-				padding: 1rem;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-			}
-
-			header {
-				text-align: center;
-				margin-bottom: 2rem;
-			}
-
-			header h1 {
-				font-size: 2.5rem;
-				color: var(--accent-color);
-			}
-
-			.poema-container {
-				max-width: 800px;
-				width: 100%; /* Asegura que no se desborde en móviles */
-				background-color: var(--card-bg);
-				padding: 1.5rem;
-				border-radius: 12px;
-				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-				margin-bottom: 2rem;
-				overflow-x: auto; /* Previene empalmes horizontales */
-			}
-
-			.poema-container h2 {
-				font-size: 1.5rem;
-				margin-bottom: 1rem;
-				color: var(--accent-color);
-			}
-
-			.poema-container .autor {
-				font-size: 1rem;
-				font-style: italic;
-				color: #555;
-				margin-bottom: 1rem;
-				text-align: right;
-			}
-
-			.poema-container p {
-				white-space: pre-line;
-				line-height: 1.8;
-				margin-bottom: 1rem;
-			}
-
-			.poema-container pre {
-				white-space: pre-wrap; /* Mantiene estructura de texto y se ajusta al contenedor */
-				font-family: var(--font-main);
-				line-height: 1.8;
-				margin-bottom: 1rem;
-			}
-
-			footer {
-				margin-top: 3rem;
-				font-size: 0.9rem;
-				color: #666;
-			}
-
-			@media (max-width: 600px) {
-				header h1 {
-					font-size: 2rem;
-				}
-
-				.poema-container {
-					padding: 1rem;
-				}
-			}
-		</style>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Poemario</title>
+		<!-- Fuentes elegantes -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Inter:wght@400;600&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="styles.css" />
+		<meta name="color-scheme" content="light" />
 	</head>
 	<body>
-		<header>
-			<h1>Poemas y Reflexiones</h1>
-			<p>Un espacio para el alma</p>
+		<header class="app-header container">
+			<div class="brand">
+				<span class="logo" aria-hidden="true">✦</span>
+				<div>
+					<h1>Poemario</h1>
+					<p class="tagline">pequeño archivo de versos y silencios</p>
+				</div>
+			</div>
 		</header>
 
-		<div class="poema-container">
-			<h2>Amanecer</h2>
-			<div class="autor">por María López</div>
-			<pre>
-                Al despuntar la aurora clara,
-                se mece el viento entre la flor,
-                y el mundo entero se prepara
-                para una nueva danza de color.
+		<main class="container">
+			<section class="toolbar">
+				<div class="search-wrap">
+					<input
+						id="searchInput"
+						type="search"
+						placeholder="Buscar por título, autor o texto…"
+						aria-label="Buscar poemas"
+					/>
+				</div>
+				<div class="filters">
+					<select id="filterSelect" aria-label="Filtrar">
+						<option value="all">Todos</option>
+						<option value="favorites">Favoritos</option>
+					</select>
+					<button id="randomBtn" class="btn">Poema al azar</button>
+				</div>
+			</section>
 
-                El sol despierta con ternura,
-                sus rayos doran el dolor,
-                y en la quietud de la llanura
-                renace suave el viejo amor.
-    </pre
+			<section id="poemList" class="grid" aria-live="polite" aria-busy="true"></section>
+		</main>
+
+		<dialog id="poemModal" class="modal">
+			<form method="dialog" class="modal-card" id="poemModalCard">
+				<header class="modal-header">
+					<div class="title-wrap">
+						<h2 id="modalTitle">Título</h2>
+						<p class="muted" id="modalMeta">Autor</p>
+					</div>
+					<div class="modal-actions">
+						<button class="icon ghost close-btn" value="cancel" aria-label="Cerrar">✕</button>
+					</div>
+				</header>
+
+				<div class="modal-body">
+					<pre id="modalContent" tabindex="0"></pre>
+				</div>
+
+				<footer class="modal-footer">
+					<div class="left">
+						<button id="favBtn" type="button" class="btn">❤️ Favorito</button>
+						<button id="copyBtn" type="button" class="btn ghost">Copiar</button>
+						<button id="shareBtn" type="button" class="btn ghost">Compartir</button>
+					</div>
+					<div class="nav">
+						<button id="prevBtn" type="button" class="icon ghost" aria-label="Anterior">←</button>
+						<button id="nextBtn" type="button" class="icon ghost" aria-label="Siguiente">→</button>
+					</div>
+					<button class="btn primary close-btn" value="cancel">Cerrar</button>
+				</footer>
+			</form>
+		</dialog>
+
+		<template id="poemCardTpl">
+			<article class="card">
+				<div class="card-head">
+					<h3 class="card-title"></h3>
+					<button
+						class="icon fav-toggle"
+						title="Marcar como favorito"
+						aria-label="Marcar como favorito"
+					>
+						♡
+					</button>
+				</div>
+				<p class="card-meta"></p>
+				<div class="card-actions">
+					<button class="btn small" data-action="open">Leer</button>
+					<button class="btn small ghost" data-action="copy">Copiar</button>
+				</div>
+			</article>
+		</template>
+
+		<footer class="container footer">
+			<small class="muted"
+				>Hecho con HTML, CSS y JS. Tus favoritos se guardan en este dispositivo.</small
 			>
-		</div>
+		</footer>
 
-		<footer>&copy; 2025 Poemas y Reflexiones. Todos los derechos reservados.</footer>
+		<script src="app.js" type="module"></script>
 	</body>
 </html>
