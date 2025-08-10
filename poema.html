@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<title>Poema — Poemario</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Inter:wght@400;600&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="styles.css" />
+		<style>
+			/* Ajustes sutiles para la página de poema */
+			.poem-header {
+				padding: 20px 20px 8px;
+			}
+			.poem-header .topbar {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 2px;
+			}
+			.back-btn {
+				border: 1px solid var(--border);
+				background: var(--card);
+				color: var(--fg);
+				border-radius: 999px;
+				padding: 8px 12px;
+				font-size: 16px;
+				text-decoration: none;
+				display: inline-flex;
+				gap: 6px;
+				align-items: center;
+			}
+			.poem-title {
+				font-family: "EB Garamond", Georgia, serif;
+				font-weight: 600;
+				font-size: 30px;
+				margin: 10px 0 4px;
+			}
+			.poem-meta {
+				color: var(--muted);
+				margin: 0 0 12px;
+			}
+			.poem-actions {
+				display: flex;
+				gap: 8px;
+				flex-wrap: wrap;
+			}
+			.poem-container {
+				max-width: 900px;
+				margin: 0 auto;
+			}
+			.poem-body {
+				background: linear-gradient(180deg, #fffdf9, #fffaf2);
+				border: 1px solid var(--border);
+				border-radius: 18px;
+				box-shadow: var(--shadow);
+				padding: 18px 22px 22px;
+				margin: 12px 20px 24px;
+			}
+			.poem-body pre {
+				margin: 0;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+					"Liberation Mono", "Courier New", monospace;
+				line-height: 1.7;
+				font-size: 16px;
+				letter-spacing: 0.1px;
+				color: color-mix(in srgb, var(--fg) 86%, #000);
+			}
+			.poem-footer {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0 20px 28px;
+				gap: 10px;
+			}
+			.poem-footer .nav {
+				display: flex;
+				gap: 6px;
+			}
+
+			@media (max-width: 700px) {
+				.poem-title {
+					font-size: 26px;
+				}
+				.poem-body {
+					margin: 10px 12px 20px;
+					border-radius: 16px;
+				}
+				.poem-footer {
+					flex-wrap: wrap;
+					padding-bottom: calc(20px + env(safe-area-inset-bottom));
+				}
+				.poem-actions {
+					overflow-x: auto;
+					-webkit-overflow-scrolling: touch;
+				}
+				.poem-actions .btn {
+					flex: 0 0 auto;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header class="poem-header">
+			<div class="poem-container">
+				<div class="topbar">
+					<a id="backBtn" class="back-btn" href="index.html" aria-label="Volver">
+						← <span class="hide-sm">Volver</span>
+					</a>
+				</div>
+				<!-- <h1 class="poem-title" id="poemTitle" style="color: #c88e56">Cargando…</h1>-->
+				<p class="poem-meta" id="poemMeta"></p>
+				<div class="poem-actions">
+					<button id="favBtn" class="btn">❤️ Favorito</button>
+					<button id="copyBtn" class="btn ghost">Copiar</button>
+					<button id="shareBtn" class="btn ghost">Compartir</button>
+				</div>
+			</div>
+		</header>
+
+		<main class="poem-container">
+			<section class="poem-body">
+				<h1 class="poem-title" id="poemTitle" style="color: #c88e56">Cargando…</h1>
+				<pre
+					id="poemContent"
+					style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64"
+				></pre>
+			</section>
+		</main>
+
+		<footer class="poem-container poem-footer">
+			<div class="muted">&copy; 2025 Literalia. Todos los derechos reservados.</div>
+			<div class="nav">
+				<button id="prevBtn" class="icon" title="Anterior">←</button>
+				<button id="nextBtn" class="icon" title="Siguiente">→</button>
+			</div>
+		</footer>
+
+		<script src="poema.js" type="module"></script>
+	</body>
+</html>

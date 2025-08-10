@@ -1,21 +1,10 @@
-/* UI más poética: se mantiene <pre>, favoritos y búsqueda.
-   Añade navegación ← → en el lector y mejoras visuales. */
+/* Poemario – Lista (sin modal). “Leer” y “Poema al azar” navegan a poema.html */
 
 const DOM = {
 	list: document.getElementById("poemList"),
 	search: document.getElementById("searchInput"),
 	filter: document.getElementById("filterSelect"),
 	randomBtn: document.getElementById("randomBtn"),
-	modal: document.getElementById("poemModal"),
-	modalCard: document.getElementById("poemModalCard"),
-	modalTitle: document.getElementById("modalTitle"),
-	modalMeta: document.getElementById("modalMeta"),
-	modalContent: document.getElementById("modalContent"),
-	favBtn: document.getElementById("favBtn"),
-	copyBtn: document.getElementById("copyBtn"),
-	shareBtn: document.getElementById("shareBtn"),
-	prevBtn: document.getElementById("prevBtn"),
-	nextBtn: document.getElementById("nextBtn"),
 	cardTpl: document.getElementById("poemCardTpl"),
 };
 
@@ -23,7 +12,6 @@ const STORE_KEYS = {favorites: "poemario:favorites"};
 let POEMS = [];
 let FILTERED = [];
 let favorites = new Set(JSON.parse(localStorage.getItem(STORE_KEYS.favorites) || "[]"));
-let currentIndex = -1; // índice en FILTERED del poema abierto
 
 init();
 
@@ -37,85 +25,23 @@ async function init() {
 		}));
 	} catch (e) {
 		console.error("Error cargando poemas.txt", e);
-		DOM.list.innerHTML = `<div class="card"><p>No se pudo cargar <code>poemas.txt</code>. Asegúrate de servir los archivos desde un servidor (no file://).</p></div>`;
+		DOM.list.innerHTML = `<div class="card"><p>No se pudo cargar <code>poemas.txt</code>. Asegúrate de servir los archivos desde un servidor.</p></div>`;
 		DOM.list.setAttribute("aria-busy", "false");
 		return;
 	}
 
 	wireUI();
-	applyHashOpen();
 	renderList();
 }
 
 function wireUI() {
 	DOM.search.addEventListener("input", renderList);
 	DOM.filter.addEventListener("change", renderList);
-	DOM.randomBtn.addEventListener("click", openRandom);
 
-	// Cerrar con click fuera y botones
-	DOM.modal.addEventListener("click", (e) => {
-		const r = DOM.modalCard.getBoundingClientRect();
-		const outside =
-			e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
-		if (outside) closeModal();
-	});
-	document.querySelectorAll(".close-btn").forEach((btn) =>
-		btn.addEventListener("click", (e) => {
-			e.preventDefault();
-			closeModal();
-		})
-	);
-
-	// Acciones modal
-	DOM.favBtn.addEventListener("click", () => {
-		const id = DOM.modal.dataset.id;
-		toggleFavorite(id);
-		updateFavButton(id);
-		const btn = document.querySelector(`.card [data-id="${id}"].fav-toggle`);
-		if (btn) btn.classList.toggle("active", favorites.has(id));
-	});
-
-	DOM.copyBtn.addEventListener("click", async () => {
-		const text = `${DOM.modalTitle.textContent}\n${DOM.modalMeta.textContent}\n\n${DOM.modalContent.textContent}`;
-		try {
-			await navigator.clipboard.writeText(text);
-			flash(DOM.copyBtn, "Copiado");
-		} catch {
-			flash(DOM.copyBtn, "No se pudo copiar");
-		}
-	});
-
-	DOM.shareBtn.addEventListener("click", async () => {
-		const id = DOM.modal.dataset.id;
-		const url = `${location.origin}${location.pathname}#poema/${encodeURIComponent(id)}`;
-		const title = DOM.modalTitle.textContent;
-		const text = `${title} — ${DOM.modalMeta.textContent}`;
-		if (navigator.share) {
-			try {
-				await navigator.share({title, text, url});
-			} catch {}
-		} else {
-			try {
-				await navigator.clipboard.writeText(url);
-				flash(DOM.shareBtn, "Enlace copiado");
-			} catch {}
-		}
-	});
-
-	// Navegación
-	DOM.prevBtn.addEventListener("click", () => step(-1));
-	DOM.nextBtn.addEventListener("click", () => step(1));
-	window.addEventListener("keydown", (e) => {
-		if (!DOM.modal.open) return;
-		if (e.key === "ArrowLeft") step(-1);
-		if (e.key === "ArrowRight") step(1);
-		if (e.key === "Escape") closeModal();
-	});
-
-	window.addEventListener("hashchange", applyHashOpen);
+	// ⤵️ ahora “Poema al azar” navega a poema.html
+	DOM.randomBtn.addEventListener("click", navigateRandom);
 }
 
-/* ---------- Render ---------- */
 function renderList() {
 	DOM.list.setAttribute("aria-busy", "true");
 	const q = DOM.search.value.trim().toLowerCase();
@@ -148,14 +74,28 @@ function renderList() {
 
 		const favBtn = node.querySelector(".fav-toggle");
 		favBtn.dataset.id = p.id;
-		favBtn.classList.toggle("active", favorites.has(p.id));
+
+		// Estado inicial según localStorage
+		const isFav = favorites.has(p.id);
+		favBtn.classList.toggle("active", isFav);
+		favBtn.setAttribute("aria-pressed", String(isFav));
+		favBtn.textContent = isFav ? "❤️" : "🤍";
+
+		// Click: alternar favorito + UI
 		favBtn.addEventListener("click", () => {
-			toggleFavorite(p.id);
-			favBtn.classList.toggle("active", favorites.has(p.id));
+			toggleFavorite(p.id); // actualiza el Set + localStorage
+			const now = favorites.has(p.id);
+			favBtn.classList.toggle("active", now);
+			favBtn.setAttribute("aria-pressed", String(now));
+			favBtn.textContent = now ? "❤️" : "🤍";
+
+			// si estás filtrando por favoritos, vuelve a renderizar la lista
 			if (DOM.filter.value === "favorites") renderList();
 		});
 
-		node.querySelector('[data-action="open"]').addEventListener("click", () => openPoem(p.id));
+		// ⤵️ “Leer” ahora va a poema.html
+		node.querySelector('[data-action="open"]').addEventListener("click", () => goToPoem(p.id));
+
 		node.querySelector('[data-action="copy"]').addEventListener("click", async () => {
 			await copyPoem(p);
 			flash(card, "Copiado");
@@ -167,51 +107,16 @@ function renderList() {
 	DOM.list.setAttribute("aria-busy", "false");
 }
 
-/* ---------- Modal ---------- */
-function openPoem(id) {
-	const idx =
-		FILTERED.findIndex((x) => x.id === id) !== -1
-			? FILTERED.findIndex((x) => x.id === id)
-			: POEMS.findIndex((x) => x.id === id);
-	const list = FILTERED.length ? FILTERED : POEMS;
-	const p = list[idx];
-	if (!p) return;
-
-	currentIndex = idx;
-	DOM.modalTitle.textContent = p.title;
-	DOM.modalMeta.textContent = metaText(p);
-	DOM.modalContent.textContent = p.content;
-	DOM.modal.dataset.id = p.id;
-	updateFavButton(p.id);
-
-	DOM.modal.showModal();
-	DOM.modal.classList.add("open");
-	setTimeout(() => DOM.modalContent.focus(), 90);
-
-	history.replaceState(null, "", `#poema/${encodeURIComponent(p.id)}`);
+/* ---------- Navegación ---------- */
+function goToPoem(id) {
+	window.location.href = `poema.html?id=${encodeURIComponent(id)}`;
 }
-
-function step(delta) {
-	const list = FILTERED.length ? FILTERED : POEMS;
-	if (!list.length) return;
-	currentIndex = (currentIndex + delta + list.length) % list.length;
-	openPoem(list[currentIndex].id);
-}
-
-function closeModal() {
-	DOM.modal.classList.remove("open");
-	const onEnd = () => {
-		DOM.modal.close();
-		history.replaceState(null, "", location.pathname + location.search);
-	};
-	const hasTransition = getComputedStyle(DOM.modalCard).transitionDuration !== "0s";
-	if (hasTransition) DOM.modalCard.addEventListener("transitionend", onEnd, {once: true});
-	else onEnd();
-}
-
-function updateFavButton(id) {
-	const isFav = favorites.has(id);
-	DOM.favBtn.textContent = isFav ? "💔 Quitar" : "❤️ Favorito";
+function navigateRandom() {
+	const source =
+		DOM.filter.value === "favorites" ? POEMS.filter((p) => favorites.has(p.id)) : POEMS;
+	if (!source.length) return;
+	const item = source[Math.floor(Math.random() * source.length)];
+	goToPoem(item.id);
 }
 
 /* ---------- Utilidades ---------- */
@@ -269,12 +174,6 @@ async function copyPoem(p) {
 	const text = `${p.title}\n${metaText(p)}\n\n${p.content}`;
 	await navigator.clipboard.writeText(text);
 }
-function openRandom() {
-	const src = DOM.filter.value === "favorites" ? POEMS.filter((p) => favorites.has(p.id)) : POEMS;
-	if (!src.length) return;
-	const it = src[Math.floor(Math.random() * src.length)];
-	openPoem(it.id);
-}
 function flash(el, msg) {
 	const tip = document.createElement("div");
 	tip.textContent = msg;
@@ -305,13 +204,4 @@ function flash(el, msg) {
 		tip.style.transform = "translate(-50%,-8px)";
 		setTimeout(() => tip.remove(), 220);
 	}, 1200);
-}
-function applyHashOpen() {
-	const m = location.hash.match(/^#poema\/(.+)$/);
-	if (m && POEMS.length) {
-		const id = decodeURIComponent(m[1]);
-		const list = FILTERED.length ? FILTERED : POEMS;
-		const idx = list.findIndex((p) => p.id === id);
-		if (idx !== -1) openPoem(id);
-	}
 }

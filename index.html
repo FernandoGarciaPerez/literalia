@@ -1,595 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="images/pluma2.png" />
 		<title>Literalia</title>
-		<style>
-			:root {
-				--bg-color: #fdf6f0;
-				--text-color: #333;
-				--accent-color: #c88e56;
-				--card-bg: #fff;
-				--font-main: "Georgia", serif;
-			}
+		<!-- Fuentes elegantes -->
 
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-			}
-
-			body {
-				font-family: var(--font-main);
-				background-color: var(--bg-color);
-				color: var(--text-color);
-				padding: 1rem;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-			}
-
-			header {
-				text-align: center;
-				margin-bottom: 2rem;
-			}
-
-			header h1 {
-				font-size: 2.5rem;
-				color: var(--accent-color);
-			}
-
-			.poema-container {
-				max-width: 800px;
-				background-color: var(--card-bg);
-				padding: 1.5rem;
-				border-radius: 12px;
-				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-				margin-bottom: 2rem;
-				overflow-x: auto; /**/
-				position: relative; /*corazon ultimo*/
-			}
-
-			.poema-container h2 {
-				font-size: 1.5rem;
-				margin-bottom: 1rem;
-				color: var(--accent-color);
-			}
-
-			.poema-container p {
-				white-space: pre-line;
-				line-height: 1.8;
-				margin-bottom: 1rem;
-			}
-
-			.poema-container .autor {
-				font-size: 1rem;
-				font-style: italic;
-				color: #555;
-				margin-bottom: 1rem;
-				text-align: right;
-			}
-			.poema-container pre {
-				white-space: pre-wrap; /* Mantiene estructura de texto y se ajusta al contenedor */
-				font-family: var(--font-main);
-				line-height: 1.8;
-				margin-bottom: 1rem;
-			}
-
-			footer {
-				margin-top: 3rem;
-				font-size: 0.9rem;
-				color: #666;
-			}
-			.corazon {
-				/*corazon ultimo*/
-				font-size: 24px;
-				color: gray !important;
-				cursor: pointer;
-				position: absolute;
-				top: 15px;
-				right: 15px;
-				transition: transform 0.2s ease, color 0.3s ease;
-			}
-
-			.corazon.leido {
-				/*corazon ultimo*/
-				color: red !important;
-				transform: scale(1.2);
-			}
-
-			@media (max-width: 600px) {
-				header h1 {
-					font-size: 2rem;
-				}
-
-				.poema-container {
-					padding: 1rem;
-				}
-			}
-		</style>
+		<link rel="stylesheet" href="styles.css" />
+		<meta name="color-scheme" content="light" />
 	</head>
 	<body>
-		<header>
-			<h1>Literalia</h1>
-			<p>Reflexiones</p>
+		<header class="app-header container">
+			<div class="brand">
+				<span class="logo" aria-hidden="true"></span>
+				<div>
+					<h1>Literalia</h1>
+					<p class="tagline">Reflexiones</p>
+				</div>
+			</div>
 		</header>
 
-		<div class="poema-container">
-			<h2>Instantes con sentido</h2>
-			<p>
-				Cuando uno empieza a notar lo efímero de las cosas, también empieza a apreciar lo esencial.
-				Tal vez por eso el tiempo parece más escaso y vivir se vuelve más profundo, pero también más
-				breve...
-			</p>
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Cuando se va entendiendo que todo es pasajero,
-que el brillo de las cosas se apaga en su sendero,
-la vida ya no es meta, ni nombre, ni dinero,
-sino el fulgor sencillo de un acto verdadero.
-
-Lo que antes parecía tan vasto y necesario,
-se vuelve solo eco de un sueño imaginario;
-y surge lo esencial, sereno, voluntario,
-como una flor que nace en medio del calvario.
-
-Tal vez por eso el tiempo nos quema diferente,
-se vuelve más profundo, más breve, más urgente;
-y cada instante simple, vivido plenamente,
-parece contener el pulso de lo ausente.
-
-Así se va aprendiendo a amar lo que no dura,
-a hallar en lo pequeño la forma más segura,
-a ver que lo que queda no siempre es la estructura,
-sino el temblor del alma que abraza su fractura.
-
-Se aprende que el silencio también es compañía,
-que hay voces en la sombra que alumbran todavía,
-y que no todo duelo destruye lo que había,
-pues hay pérdidas que abren la puerta a la alegría.
-
-Ya no se teme tanto la noche ni el final,
-pues todo lo que acaba revela lo vital;
-vivir se vuelve entonces un rito elemental,
-una entrega sin ruido, desnuda, esencial.
-
-No queda más refugio que el paso consciente,
-ni más verdad que ser lo que uno es, de frente;
-ya no se huye al tiempo, se mira diferente:
-con la paz del que sabe que todo es suficiente.
-
-Y cuando al fin la sombra se asome sin engaño,
-cuando el cuerpo se rinda a su último peldaño,
-habrá en el alma un canto sin miedo ni rebaño:
-“Lo breve fue profundo, y no me hizo daño.”
-
-No hay eternidad fija, ni un cielo prometido,
-solo el fulgor del paso que deja lo vivido;
-y acaso en ese rastro, tan tenue y compartido,
-reside lo más alto que el alma haya sentido.
-
-Porque vivir no es más que arder con lo que pasa,
-tocar lo que se escapa, llorar lo que se abraza,
-y hallar, en medio del polvo que todo arrasa,
-el leve resplandor que en lo simple se traza.
-
-Y así, cuando el camino se pierda en su desvelo,
-y el último suspiro se eleve rumbo al cielo,
-no habrá temor ni angustia, ni peso en el anhelo:
-solo un alma en silencio, devolviéndose al vuelo.
-			</pre
-			>
-			<p>
-				Al final, todo lo que creemos permanente se disuelve. Y es precisamente cuando aceptamos esa
-				fragilidad que la vida se vuelve más nítida. Lo efímero no es un enemigo, sino un maestro:
-				nos recuerda que nada nos pertenece, salvo el instante en el que respiramos y miramos de
-				frente lo que amamos. El tiempo, cuando se comprende, deja de ser una amenaza y se convierte
-				en un marco: gracias a sus límites, aprendemos a elegir, a soltar lo trivial y a abrazar
-				solo lo que importa. Es entonces cuando vivir se vuelve más intenso… quizá más breve, sí,
-				pero también infinitamente más verdadero. Y tal vez ahí esté la respuesta: no en aferrarnos
-				al mundo, sino en aprender a estar, aunque todo pase. Porque lo esencial nunca se mide en
-				duración, sino en instantes con sentido.
-			</p>
-			<div class="autor">Autor: IF- (11/12/23)(29/07/25)</div>
-			<span class="corazon" data-id="instantesconsentido">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Vacío</h2>
-			<pre>
-Vivimos rodeados de cosas, y sin embargo, cada vez más vacíos. Nos enseñan que la felicidad se compra, que vale tanto como el precio de lo que poseemos. Y así, corremos detrás de objetos que brillan solo un instante, para descubrir demasiado tarde que no pueden llenar el silencio de lo que realmente nos falta.
-
-El materialismo es una promesa rota: nos da la ilusión de control sobre un mundo que, tarde o temprano, nos será arrebatado. Nada de lo que acumulamos nos acompañará más allá de este breve tránsito. Sin embargo, seguimos midiendo nuestra vida por la cantidad y no por la profundidad, por el tener y no por el ser.
-
-Quizá por eso quienes aprenden a mirar más allá de lo tangible encuentran una paz distinta. Descubren que lo esencial nunca se compra: está en una palabra sincera, en una caricia que no espera nada a cambio, en el instante en que alguien nos mira y nos ve de verdad.
-
-Lo material puede hacernos sentir cómodos, pero solo lo esencial nos hace sentir vivos. Y mientras no comprendamos esa diferencia, seguiremos habitando un mundo lleno de cosas… pero vacío de sentido.
-</pre
-			>
-			<div class="autor">Autor: IF- (08/10/22)</div>
-			<span class="corazon" data-id="vacio">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>LAD</h2>
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Bajo el cielo encendido, mientras el viento susurraba historias al pasar,
-tus ojos guardaban un brillo tan profundo que el mundo parecía callar,
-y en aquel espacio sin prisa, donde el tiempo dejaba de gobernar,
-cada latido se unía al silencio, como un eco imposible de olvidar.
-
-La brisa, con su caricia tenue, parecía envolvernos en un sueño sin final,
-y cada palabra tuya caía en mi alma como un verso sutil y celestial,
-en ese instante perfecto donde amar no tenía principio ni umbral,
-y el horizonte, como un espejo, nos prometía un destino inmortal.
-
-Caminamos sin miedo, dejando huellas que el aire parecía proteger,
-mientras el cielo pintaba su lienzo de oro para nunca volver,
-y aunque todo lo vivido supiera a instante que no podía permanecer,
-en aquel rincón del alma supe que nada podría desvanecer.
-
-Cuando la noche llegó y el murmullo del viento se volvió canción,
-en tus manos encontré el refugio exacto de toda explicación,
-y comprendí que incluso en lo fugaz existe una eterna razón,
-pues hay amores tan breves que se vuelven eternos en el corazón.
-
-Y aunque el alba despierte, borrando las huellas que el viento no quiso guardar,
-en mi mente seguirá resonando tu voz, como un faro que nunca deja de brillar,
-porque hay momentos tan puros que ni el tiempo se atreve a tocar,
-y aun cuando se vuelven recuerdo, saben renacer sin dejar de amar.
-
-El horizonte parece lejano, pero en su lejanía guarda tu reflejo callado,
-como si el universo supiera que lo fugaz no muere, sólo queda sellado,
-y en cada ola de memoria que regresa, tu nombre vuelve elevado,
-como un susurro eterno que ni el silencio ha logrado dejar sepultado.
-
-Quizás la vida sólo sea un puñado de instantes que aprendemos a sostener,
-y aquel junto a ti, aunque breve, no dejará nunca de florecer,
-porque hay amores que no necesitan futuro para volver a nacer,
-pues bastan en su esencia, con tan solo existir… para permanecer.
-</pre
-			>
-			<div class="autor">Autor: IF- (01/08/24)</div>
-			<span class="corazon" data-id="lad">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Inicio y final</h2>
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Recuerdo los días de sol donde todo empezaba a latir,
-la risa en el viento, los juegos, el mundo aprendiendo a existir,
-miradas robadas en tardes que ardían buscando un sentir,
-y el cielo guardaba secretos que solo sabíamos decir.
-
-Tus pasos corrían ligeros bailando entre sueños y flores,
-mis manos temblaban al verte temiendo romper mil colores,
-las horas pasaban tan lentas sembrando en la piel mil temores,
-y el tiempo se hacía un refugio de dulces y nuevos sabores.
-
-Cantaba la vida en tus ojos de infancia, de brisa y de fe,
-brotaban las risas en mares que nunca pudieron caer,
-soñábamos juntos paisajes que aún no sabíamos ver,
-y el alma se hacía más libre con solo mirarte y creer.
-
-Las calles guardaban el eco de todo lo que prometimos,
-las manos buscaban la excusa de un roce que no construimos,
-las tardes hablaban en códigos puros que nunca rompimos,
-y el mundo giraba tan lento en la órbita que descubrimos.
-
-Qué dulce era amarte sin miedo, sin culpas, sin tiempo, sin peso,
-soñar que la vida era simple, que el cielo cabía en un beso,
-sentir que la mano temblaba al rozar el secreto de un rezo,
-y darte mis sueños tan puros, sin prisa, sin dueño ni exceso.
-
-Fuiste la canción de la brisa que sopla en la infancia perdida,
-fuiste la razón de mis pasos, el faro en mi nueva partida,
-fuiste el primer nombre que guarda mi sangre en su eterna guarida,
-fuiste ese primer universo que nunca abandonó mi vida.
-
-Hoy guardo tu risa en rincones que el tiempo no quiso borrar,
-las huellas sutiles del viento que aún saben tu nombre nombrar,
-las cartas del alma en la arena que nunca dejaron de hablar,
-y el pulso inocente en mis venas que insiste en querer recordar.
-
-Crecimos llevando en el pecho los ecos de aquella locura,
-cambiamos el juego por sueños, la risa por vieja ternura,
-dejamos al tiempo escribirnos en hojas de sabia amargura,
-y fuimos lecciones de vida que guardan su propia hermosura.
-
-No duele el saber que el camino llevó nuestros pasos al mar,
-no duelen las puertas cerradas si fue necesario cerrar,
-no duele que el viento nos lleve si aún se nos puede encontrar,
-en mundos secretos que el alma aún sabe besar y abrazar.
-
-La vida nos dio otros paisajes, nos puso otras voces, otras manos,
-cambiamos de cielos, de rutas, de puentes, de fuegos lejanos,
-pero algo de ti se mantiene dormido en mis días tempranos,
-y canta en mis sueños más puros cuando olvido todos mis daños.
-
-A veces regreso en silencio a ese tiempo de sol y campanas,
-me pierdo en los rostros, los juegos, las calles, las flores tempranas,
-y encuentro tu sombra ligera cruzando mis viejas mañanas,
-te abrazo en un soplo de viento que limpia mis noches humanas.
-
-Y entiendo que amarte fue siempre crecer en la forma más bella,
-fue darle al abismo un latido, fue hacer de mi sangre una estrella,
-fue ser primavera en el pecho, fue ser de la vida centella,
-fue verte partir, no perderte, fue verte en el alma más bella.
-
-Los años escriben sus cartas en hojas que el viento despeina,
-los días se cruzan en calles que guardan su antigua diadema,
-las voces resuenan en tardes bañadas de antigua azucena,
-y todo me lleva de nuevo a la puerta que nunca condena.
-
-Tu risa de entonces se mezcla en los días de lluvia plateada,
-las luces que tiemblan al alba despiertan tu estampa callada,
-los parques se llenan de aromas que vienen de aquella jornada,
-y el alma respira tu nombre como una promesa guardada.
-
-Quizá ya no duelan los pasos que el tiempo obligó a separar,
-quizá ya la vida ha sabido enseñarme de nuevo a volar,
-quizá en cada grieta del alma florece un milagro al amar,
-y el eco de ti me recuerda que es libre quien sabe soltar.
-
-No hay culpa, no hay pena, no hay llanto escondido en mi canto sereno,
-no hay lucha, no hay miedo, no hay frío en las huellas que dejo y que lleno,
-tan sólo la gracia de haberte encontrado en un tiempo tan pleno,
-tan sólo la gloria de haberte sentido en mi pulso terreno.
-
-Y sigo sembrando en mis días las huellas que el alma decora,
-y sigo buscando en mis pasos el eco de aquella aurora,
-y sigo creyendo que el alma que ama jamás se demora,
-en guardar la esencia de amores que fueron su eterna mejora.
-
-Algún día, en sombras de mundos que el tiempo aún no sabe nombrar,
-mi alma y la tuya serán solo ecos que vagan buscando danzar,
-seremos apenas un soplo, un susurro imposible de hallar,
-y aun así, en la brisa del alba, tu risa me vendrá a besar.
-
-Serás la semilla de todos los sueños que aún voy a sembrar,
-serás la ceniza dorada que el viento no quiso apagar,
-serás la leyenda que a veces mi sangre sabrá recordar,
-serás esa parte de vida que nunca dejó de brillar.
-
-Y yo, caminante de días que cruzan los mares del viento,
-te llevaré siempre en la entraña más honda de todo mi intento,
-serás el refugio invisible que calme mis breves tormentos,
-serás el primer latido en el centro final de mi aliento.
-
-Por eso no lloro tu nombre, ni tiemblo en las noches calladas,
-por eso no busco en el tiempo respuestas a huellas borradas,
-por eso respiro tan hondo las nuevas auroras doradas,
-pues sé que quien ama de veras no pierde jamás sus jornadas.
-
-Te dejo en la ruta del alma, sembrando en las tardes tu flor,
-te dejo en el canto del mundo, latiendo en la eterna labor,
-te dejo en la sangre del tiempo, brillando en la voz del rumor,
-te dejo en mi vida completa, guardado en la forma del amor.
-
-Así, entre caminos y brisas que el alma jamás olvidará,
-así, entre silencios y cantos que el tiempo de lejos llevará,
-así, entre la vida y la muerte que un día me abrazarán ya,
-tu nombre será la semilla que siempre en mi pecho brotará.
-
-
-
-			</pre
-			>
-			<div class="autor">Autor: IF- (--/--/--)</div>
-			<span class="corazon" data-id="inicioyfinal">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Silencio</h2>
-
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Supe que el viento traía noticias de un ciclo cerrado,
-supe que el tiempo marcaba distancias que el alma ha dejado,
-supe que tus pasos heridos buscaban andar otro lado,
-y yo, en el silencio más puro, guardaba mi pecho callado.
-
-No era el momento de alas, no era el instante de ser,
-sabía que el alma dolida precisa primero aprender,
-sabía que un canto de amores no puede nacer del caer,
-y amarte era dar a tu vida el tiempo preciso de arder.
-
-Miraba tus gestos más libres, sentía tu voz titubear,
-sabía que el alma que sufre requiere primero sanar,
-sabía que el viento de amores no puede forzarse a soplar,
-y amaba tu sombra a lo lejos, temiendo tan sólo dañar.
-
-Mi pecho gritaba en su canto queriendo volar hacia ti,
-mi sangre temblaba en los sueños pidiendo llegar hasta mí,
-pero amarte era respetarte, callarte, cuidarte hasta el fin,
-y el alma guardaba sus fuegos temiendo romper el jardín.
-			</pre
-			>
-			<div class="autor">Autor: IF- (17/12/18)</div>
-			<span class="corazon" data-id="silencio">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>...</h2>
-
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Te marchaste en silencio, llevando contigo el brillo de los días,
-y aunque no habitabas mi techo, tu risa llenaba las horas vacías,
-ahora sólo queda el eco de los recuerdos y sus melodías,
-mientras el viento susurra tu nombre en sus frías agonías.
-
-No hubo promesas rotas, sólo el cruel precio de los sueños,
-pero qué dura es la espera cuando el alma tiembla en sus empeños,
-camino las calles que juntos cruzamos, bajo los mismos ceños,
-y en cada esquina la ausencia me golpea con mil pequeños dueños.
-
-Quizá regreses, no sé cuándo, ni si el destino querrá encontrarnos,
-pero guardo tus palabras como faros que nunca dejan de iluminarnos,
-y aunque la distancia me hiera, aunque los días quieran quebrarnos,
-seguiré creyendo que algún día las estrellas volverán a mirarnos.
-
-Adiós no es final, me repito, aunque el pecho se ahogue en despedida,
-pues tu viaje es una herida que sangra, pero también da vida,
-y si cumplir tus sueños es la razón por la que hoy estás perdida,
-esperaré en la sombra, hasta que tu risa regrese, encendida.
-			</pre
-			>
-			<div class="autor">Autor: IF- (2020)</div>
-			<span class="corazon" data-id="sintitulo">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Comienzo</h2>
-
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Te vi entre las horas doradas que canta la tarde al morir,
-y supe en el alma temblando que nunca podría fingir,
-que algo en tu risa me alzaba del miedo, del frío, del gris,
-y todo mi mundo cambiaba al verte, sin yo decidir.
-
-Tus ojos tejían estrellas que nadie sabía mirar,
-pintaban los cielos más puros que yo no podía alcanzar,
-cambiaban la sombra en luceros que sólo sabía nombrar,
-y abrían caminos secretos que el alma empezaba a buscar.
-
-Reías tan libre, tan clara, tan llena de vida y amor,
-tu risa era un viento de mayo que daba al dolor redención,
-tu voz me llenaba los días de tierna, sencilla pasión,
-y el mundo cabía en un gesto, en un juego, en tu corazón.
-
-No supe del todo el momento que el alma empezó a florecer,
-no vi cuando el sueño en mi pecho comenzó sin querer a crecer,
-sólo sé que al verte en la tarde mi sangre aprendió a renacer,
-y supe que el tiempo contigo sería mi forma de ser.
-
-			</pre
-			>
-			<div class="autor">Autor: IF-</div>
-			<span class="corazon" data-id="Comienzo">&#10084;</span>
-		</div>
-		<div class="poema-container">
-			<h2>Despertar</h2>
-
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Y antes de tu luz caminaba perdido en la niebla sin fin,
-mis días rodaban vacíos, sin canto, sin norte, sin mí.
-Mas vino tu risa de mayo, tan pura, tan clara al latir,
-y todo el silencio del mundo tembló hasta volver a vivir.
-
-Te vi entre las horas doradas que el cielo sabía escribir,
-y en ti se encendieron mil luces que nunca pensé descubrir;
-tu voz era un río de cielo que vino a mi sombra a teñir,
-y todo en mi sangre temblaba sin poderlo ya resistir.
-
-No supe el instante preciso en que el alma empezó a arder,
-quizá fue tu gesto sencillo, tu forma de al mundo entender;
-o acaso tus manos de brisa, tan llenas de un dulce poder,
-que hicieron del frío un refugio, del miedo, un deseo de creer.
-
-Y ahora si el cielo se apaga, tu nombre será su canción,
-pues vive en mi sangre tu huella, mi fuerza, mi fe, mi razón;
-y mientras respire la tierra y vibre este tenue latir,
-serás en mis días la llama que nunca se quiere extinguir.
-
-
-			</pre
-			>
-			<div class="autor">Autor: IF-</div>
-			<span class="corazon" data-id="Despertar">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Eras...</h2>
-
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Crecimos al filo del viento que alzaba sus himnos de abril,
-jugamos con mapas de estrellas que sólo cabían en mí,
-soñamos en plazas desiertas futuros que no vi venir,
-y amamos con todo el latido que sabe quién empieza a vivir.
-
-Tus manos dejaban caminos de luz en el cielo de agosto,
-mi sangre aprendía el lenguaje secreto que brota en tu rostro,
-tus pasos marcaban la danza de un mundo dorado y hermoso,
-y yo me perdía en la dicha de hallarme en tu abrazo precioso.
-
-Hablábamos poco, callábamos más, pero todo entendía,
-tus ojos contaban historias que el alma por fin compartía,
-las tardes pasaban en vuelos de risa que nunca moría,
-y el tiempo en tus labios jugaba a quedarse en eterna poesía.
-
-Eras el refugio en mis días, la voz que me hacía vibrar,
-eras el suspiro en mi pecho, la llama que quiso brotar,
-eras la razón de mis sueños, la risa que vino a sanar,
-eras la promesa del mundo que apenas podía tocar.
-
-
-
-			</pre
-			>
-			<div class="autor">Autor: IF-</div>
-			<span class="corazon" data-id="eras">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Fui...</h2>
-
-			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
-Pasaban los días y el alma tejía tu rastro en secreto,
-las horas caían despacio bordando tu risa en mi pecho,
-las tardes se hacían suspiros que al verte sabían su derecho,
-y el mundo guardaba en sus giros el dulce rumor de tu gesto.
-
-No eras consciente del canto que hacías nacer en mi vida,
-no veías el fuego callado que en mí se volvía guarida,
-tus pasos danzaban tan libres, tan lejos de toda partida,
-y yo respiraba tu nombre sin voz, sin promesa, sin prisa.
-
-Guardaba tus risas como agua que brota en un claro de estío,
-soñaba tus ojos como astros que tiemblan de amor en vacío,
-pensaba tu nombre en las noches que el viento traía hasta el río,
-y amaba en silencio el milagro de verte cruzando el rocío.
-
-Fui tierra que aprende del agua que corre sin verla llegar,
-fui brisa que roza tu sombra sin nunca poderte alcanzar,
-fui barco perdido en tus mares, sin puerto, sin redes, sin mar,
-fui sueño que nace en la niebla temblando en su ansia de amar.
-
-
-
-			</pre
-			>
-			<div class="autor">Autor: IF-</div>
-			<span class="corazon" data-id="eras">&#10084;</span>
-		</div>
-
-		<div class="poema-container">
-			<h2>Proximamente... 10/08/25</h2>
-
-			<div class="autor"></div>
-		</div>
-
-		<footer>&copy; 2025 Literalia. Todos los derechos reservados.</footer>
-
-		<script>
-			document.addEventListener("DOMContentLoaded", () => {
-				const corazones = document.querySelectorAll(".corazon");
-
-				corazones.forEach((corazon) => {
-					const id = corazon.dataset.id;
-
-					// Sólo aplicamos "leído" si está guardado en localStorage
-					if (localStorage.getItem(`leido_${id}`) === "true") {
-						corazon.classList.add("leido");
-					} else {
-						corazon.classList.remove("leido"); // Aseguramos que empiece gris
-					}
-
-					corazon.addEventListener("click", () => {
-						corazon.classList.toggle("leido");
-						localStorage.setItem(`leido_${id}`, corazon.classList.contains("leido"));
-					});
-				});
-			});
-		</script>
+		<main class="container">
+			<section class="toolbar">
+				<div class="search-wrap">
+					<input
+						id="searchInput"
+						type="search"
+						placeholder="Buscar por título, autor o texto…"
+						aria-label="Buscar poemas"
+					/>
+				</div>
+				<div class="filters">
+					<select id="filterSelect" aria-label="Filtrar">
+						<option value="all">Todos</option>
+						<option value="favorites">Favoritos</option>
+					</select>
+					<button id="randomBtn" class="btn">Poema al azar</button>
+				</div>
+			</section>
+
+			<section id="poemList" class="grid" aria-live="polite" aria-busy="true"></section>
+		</main>
+
+		<dialog id="poemModal" class="modal">
+			<form method="dialog" class="modal-card" id="poemModalCard">
+				<header class="modal-header">
+					<div class="title-wrap">
+						<h2 id="modalTitle">Título</h2>
+						<p class="muted" id="modalMeta">Autor</p>
+					</div>
+					<div class="modal-actions">
+						<button class="icon ghost close-btn" value="cancel" aria-label="Cerrar">✕</button>
+					</div>
+				</header>
+
+				<div class="modal-body">
+					<pre id="modalContent" tabindex="0"></pre>
+				</div>
+
+				<footer class="modal-footer">
+					<div class="left">
+						<button id="favBtn" type="button" class="btn">❤️ Favorito</button>
+						<button id="copyBtn" type="button" class="btn ghost">Copiar</button>
+						<button id="shareBtn" type="button" class="btn ghost">Compartir</button>
+					</div>
+					<div class="nav">
+						<button id="prevBtn" type="button" class="icon ghost" aria-label="Anterior">←</button>
+						<button id="nextBtn" type="button" class="icon ghost" aria-label="Siguiente">→</button>
+					</div>
+					<button class="btn primary close-btn" value="cancel">Cerrar</button>
+				</footer>
+			</form>
+		</dialog>
+
+		<template id="poemCardTpl">
+			<article class="card">
+				<div class="card-head">
+					<h3 class="card-title"></h3>
+					<button
+						class="fav-toggle"
+						title="Marcar como favorito"
+						aria-label="Marcar como favorito"
+						aria-pressed="false"
+					>
+						🤍
+					</button>
+				</div>
+				<p class="card-meta"></p>
+				<div class="card-actions">
+					<button class="btn small" data-action="open">Leer</button>
+					<button class="btn small ghost" data-action="copy">Copiar</button>
+				</div>
+			</article>
+		</template>
+
+		<section class="update-info">
+			<p>📅 Proxima publicacion: 11/08/2025</p>
+		</section>
+
+		<footer class="container footer">
+			<small class="muted">&copy; 2025 Literalia. Todos los derechos reservados.</small>
+		</footer>
+
+		<script src="app.js" type="module"></script>
 	</body>
 </html>

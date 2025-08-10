@@ -1,28 +1,37 @@
 :root{
-  /* Paleta cálida y poética */
+  /* Paleta cálida */
   --bg:#fdf8f3;
   --fg:#3b2f2f;
   --muted:#7b6f65;
   --card:#fffdf9;
   --border:#e6d9c6;
-  --accent:#d4a373;
+  --accent:#c88e56;               /* acorde a tu ejemplo */
   --accent-contrast:#ffffff;
   --shadow:0 12px 28px rgba(139,115,85,.16);
   --radius:14px;
+
+  /* Fuentes */
+  --font-main: "Georgia", serif;
+  --font-title: "Georgia", serif;
+  --font-ui: "Georgia", serif;
+
+  /* Verso (pre) */
+  --verse-color:#bd8f64;          /* el tono que usaste en tu página */
 }
 
 /* --- Base --- */
 *{box-sizing:border-box}
 html,body{height:100%}
-html{ -webkit-text-size-adjust:100%; } /* iOS: evita zoom raro al cambiar tamaño de texto */
+html{ -webkit-text-size-adjust:100%; }
 body{
   margin:0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-family: var(--font-ui);
   color:var(--fg);
   background:
-    radial-gradient(900px 480px at 75% -10%, rgba(212,163,115,.12), transparent 60%) no-repeat,
+    radial-gradient(900px 480px at 75% -10%, rgba(200,142,86,.12), transparent 60%) no-repeat,
     linear-gradient(180deg, #fdf8f3, #fbf4ea 45%, #f8efe5 100%);
-  line-height:1.55;
+  line-height:1.58;
+  letter-spacing:.1px;
 }
 
 .container{max-width:1000px;margin:0 auto;padding:20px}
@@ -30,14 +39,14 @@ body{
 /* --- Header --- */
 .app-header{padding:28px 20px 10px}
 .brand{display:flex;gap:12px;align-items:flex-start}
-.logo{font-size:22px;margin-top:2px; filter: drop-shadow(0 1px 0 rgba(212,163,115,.25));}
+.logo{font-size:22px;margin-top:2px; filter: drop-shadow(0 1px 0 rgba(200,142,86,.25));}
 h1{
-  font-family:"EB Garamond", Georgia, serif;
-  font-size:32px; font-weight:600; letter-spacing:.2px; margin:0; color:var(--fg);
+  font-family: var(--font-title);
+  font-size:32px; font-weight:700; letter-spacing:.2px; margin:0; color:var(--fg);
 }
 .tagline{
-  margin:.2rem 0 0; color:var(--muted); font-size:14px;
-  font-family:"EB Garamond", Georgia, serif; font-style:italic;
+  margin:.2rem 0 0; color:var(--muted); font-size:15px;
+  font-family: var(--font-main); font-style:italic;
 }
 
 /* --- Toolbar --- */
@@ -58,6 +67,7 @@ h1{
   padding:12px 16px;
   outline:none;
   font-size:16px;            /* iOS: evita zoom al enfocar */
+  font-family: var(--font-ui);
   transition:border .15s ease, box-shadow .15s ease, background .15s ease;
 }
 .search-wrap input::placeholder{color:color-mix(in srgb, var(--muted) 80%, white)}
@@ -75,6 +85,7 @@ select{
   border-radius:999px;
   padding:10px 12px;
   font-size:16px;            /* iOS: evita zoom */
+  font-family: var(--font-ui);
 }
 
 /* --- Grid & Card --- */
@@ -84,7 +95,7 @@ select{
   position:relative;
   background:
     linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.98)),
-    radial-gradient(1200px 300px at 0% 0%, rgba(212,163,115,.10), transparent 50%);
+    radial-gradient(1200px 300px at 0% 0%, rgba(200,142,86,.10), transparent 50%);
   border:1px solid var(--border);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
@@ -95,16 +106,16 @@ select{
 .card::before{
   content:""; position:absolute; inset:0; border-radius:inherit;
   background:
-    linear-gradient(90deg, rgba(212,163,115,.12), transparent 30%),
-    linear-gradient(180deg, rgba(212,163,115,.08), transparent 35%);
+    linear-gradient(90deg, rgba(200,142,86,.12), transparent 30%),
+    linear-gradient(180deg, rgba(200,142,86,.08), transparent 35%);
   opacity:.08; pointer-events:none;
 }
 .card:hover{transform:translateY(-3px); background:linear-gradient(180deg,#fffefb,#fffdfa)}
 
 .card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .card-title{
-  font-family:"EB Garamond", Georgia, serif;
-  margin:0; font-size:20px; letter-spacing:.2px;
+  font-family: var(--font-title);
+  margin:0; font-size:21px; letter-spacing:.2px;
 }
 .card-title::before{content:"❦"; margin-right:.45rem; opacity:.55; font-size:16px; color:var(--accent)}
 .card-meta{margin:0;color:var(--muted); font-variant-numeric:oldstyle-nums}
@@ -118,7 +129,8 @@ select{
   border-radius:999px;
   padding:9px 14px;
   cursor:pointer;
-  font-size:16px;            /* iOS: evita zoom */
+  font-size:16px;
+  font-family: var(--font-ui);
   transition:transform .05s ease, background .15s ease, border .15s ease, opacity .15s ease, box-shadow .15s ease;
 }
 .btn:hover{transform:translateY(-1px)}
@@ -143,7 +155,7 @@ select{
 .muted{color:var(--muted)}
 .footer{text-align:center;padding:36px 0 48px}
 
-/* --- Modal “hoja” --- */
+/* --- Modal (si aún lo usas) --- */
 .modal{border:none;padding:0;background:transparent}
 .modal::backdrop{background:rgba(0,0,0,.0);transition:background .35s ease}
 .modal.open::backdrop{background:rgba(80,60,40,.38)}
@@ -160,42 +172,56 @@ select{
   display:grid; grid-template-rows:auto 1fr auto;
 
   opacity:0;
-  transform:translateY(16px);            /* sin escala para evitar efecto “zoom” */
+  transform:translateY(16px);
   transition:opacity .24s ease, transform .24s ease;
 
-  overflow:hidden;                        /* nada se sale visualmente */
-  padding-bottom: env(safe-area-inset-bottom); /* respeta área segura inferior */
+  overflow:hidden;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 .modal.open .modal-card{opacity:1; transform:translateY(0)}
 
 .modal-header,.modal-footer{padding:16px 18px;display:flex;align-items:center;gap:10px}
 .modal-header{justify-content:space-between;border-bottom:1px solid var(--border)}
 .title-wrap h2{
-  font-family:"EB Garamond", Georgia, serif; font-weight:600; font-size:26px; margin:0;
+  font-family: var(--font-title); font-weight:700; font-size:26px; margin:0;
 }
 .modal-body{
   padding:18px 22px 22px 22px; overflow:auto;
   background:
-     radial-gradient(600px 120px at 10% 0%, rgba(212,163,115,.10), transparent 40%),
-     radial-gradient(500px 140px at 90% 0%, rgba(212,163,115,.08), transparent 45%);
-  -webkit-overflow-scrolling: touch;      /* scroll suave en iOS */
+     radial-gradient(600px 120px at 10% 0%, rgba(200,142,86,.10), transparent 40%),
+     radial-gradient(500px 140px at 90% 0%, rgba(200,142,86,.08), transparent 45%);
+  -webkit-overflow-scrolling: touch;
 }
 .modal-body pre{
   margin:0;
   white-space:pre-wrap; word-wrap:break-word;
-  font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
-  line-height:1.7; font-size:16px; letter-spacing:.1px;
-  color:color-mix(in srgb, var(--fg) 86%, #000);
+  font-family: var(--font-main);
+  font-style: italic;
+  line-height:1.8; font-size:16px;
+  color: var(--verse-color);
   outline:none;
 }
-.modal-body pre:focus{ box-shadow: inset 0 0 0 2px rgba(212,163,115,.25); border-radius:10px; }
+.modal-body pre:focus{ box-shadow: inset 0 0 0 2px rgba(200,142,86,.22); border-radius:10px; }
 .modal-footer{border-top:1px solid var(--border); justify-content:space-between}
 .modal-footer .left{display:flex;gap:8px;align-items:center}
 .modal-footer .nav{display:flex;gap:6px}
 
+/* --- Página de poema (poema.html) reutiliza estilos base ---
+   Solo nos aseguramos que el <pre> tenga el mismo look */
+.poem-title, .card-title, h1{ font-family: var(--font-title); }
+.poem-actions .btn{ font-family: var(--font-ui); }
+.poem-body pre{
+  font-family: var(--font-main);
+  font-style: italic;
+  color: var(--verse-color);
+  line-height:1.8; font-size:16px;
+}
+
+
+
 /* --------- Responsive móvil --------- */
 @media (max-width: 700px){
-  /* 1) Buscador a todo el ancho; controles abajo */
+  /* Buscador a todo el ancho; controles abajo */
   .toolbar{
     grid-template-columns:1fr;
     gap:10px;
@@ -209,7 +235,7 @@ select{
     flex:1;
   }
 
-  /* 2) Modal como hoja inferior fija */
+  /* Modal como hoja inferior (si se usa) */
   .modal-card{
     position: fixed;
     left: 0; right: 0; bottom: 0;
@@ -217,17 +243,17 @@ select{
     max-width: 100%;
     margin: 0;
     border-radius:18px 18px 0 0;
-    transform: translateY(100%);           /* estado cerrado */
+    transform: translateY(100%);
     height: 85vh;                           /* fallback */
   }
   @supports (height: 100dvh){
     .modal-card{
-      height: calc(85dvh - env(safe-area-inset-bottom)); /* usa viewport dinámico en iOS moderno */
+      height: calc(85dvh - env(safe-area-inset-bottom));
     }
   }
   .modal.open .modal-card{ transform: translateY(0); }
 
-  /* 3) Footer apilable y scrollable si no caben los botones */
+  /* Footer apilable / scrollable si no caben botones */
   .modal-footer{
     flex-wrap: wrap;
     row-gap: 10px;
@@ -243,7 +269,7 @@ select{
   }
   .modal-footer .left .btn{ flex: 0 0 auto; }
   .modal-footer .nav{ margin-left: auto; }
-  .modal-footer .btn.primary{ order: 3; }  /* “Cerrar” se coloca al final */
+  .modal-footer .btn.primary{ order: 3; }
 }
 
 /* Micro-entradas */
@@ -251,3 +277,39 @@ select{
   .card{animation:fadeIn .35s ease both}
   @keyframes fadeIn{from{opacity:0; transform:translateY(3px)} to{opacity:1; transform:translateY(0)}}
 }
+
+
+.fav-toggle{
+  font-size: 20px;
+  line-height: 1;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 4px;
+  color: inherit;            /* dejamos que el emoji pinte su propio color */
+  transition: transform .12s ease, opacity .12s ease;
+}
+.fav-toggle:hover{ transform: scale(1.06); }
+.fav-toggle:active{ transform: scale(0.98); }
+
+/* Accesibilidad al foco */
+.fav-toggle:focus-visible{
+  outline: 3px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  outline-offset: 2px;
+}
+
+.update-info {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted, #666);
+  background-color: rgba(0,0,0,0.02);
+  border-radius: 8px;
+  font-style: italic;
+}
+.update-info p {
+  margin: 0;
+}
+

@@ -1,38 +1,129 @@
-title: Fui...
-author: Autor: IF-
-year: 
-tags: 
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/png" href="images/pluma2.png" />
+		<title>Literalia</title>
+		<style>
+			:root {
+				--bg-color: #fdf6f0;
+				--text-color: #333;
+				--accent-color: #c88e56;
+				--card-bg: #fff;
+				--font-main: "Georgia", serif;
+			}
 
-Pasaban los días y el alma tejía tu rastro en secreto,
-las horas caían despacio bordando tu risa en mi pecho,
-las tardes se hacían suspiros que al verte sabían su derecho,
-y el mundo guardaba en sus giros el dulce rumor de tu gesto.
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
 
-No eras consciente del canto que hacías nacer en mi vida,
-no veías el fuego callado que en mí se volvía guarida,
-tus pasos danzaban tan libres, tan lejos de toda partida,
-y yo respiraba tu nombre sin voz, sin promesa, sin prisa.
+			body {
+				font-family: var(--font-main);
+				background-color: var(--bg-color);
+				color: var(--text-color);
+				padding: 1rem;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
 
-Guardaba tus risas como agua que brota en un claro de estío,
-soñaba tus ojos como astros que tiemblan de amor en vacío,
-pensaba tu nombre en las noches que el viento traía hasta el río,
-y amaba en silencio el milagro de verte cruzando el rocío.
+			header {
+				text-align: center;
+				margin-bottom: 2rem;
+			}
 
-Fui tierra que aprende del agua que corre sin verla llegar,
-fui brisa que roza tu sombra sin nunca poderte alcanzar,
-fui barco perdido en tus mares, sin puerto, sin redes, sin mar,
-fui sueño que nace en la niebla temblando en su ansia de amar.
+			header h1 {
+				font-size: 2.5rem;
+				color: var(--accent-color);
+			}
 
----
-title: Instantes con sentido
-author: Autor: IF-
-year: (11/12/23)(29/07/25)
-tags: 
+			.poema-container {
+				max-width: 800px;
+				background-color: var(--card-bg);
+				padding: 1.5rem;
+				border-radius: 12px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+				margin-bottom: 2rem;
+				overflow-x: auto; /**/
+				position: relative; /*corazon ultimo*/
+			}
 
-Cuando uno empieza a notar lo efímero de las cosas, también empieza a apreciar lo esencial.
-Tal vez por eso el tiempo parece más escaso y vivir se vuelve más profundo, pero también más
-breve..
+			.poema-container h2 {
+				font-size: 1.5rem;
+				margin-bottom: 1rem;
+				color: var(--accent-color);
+			}
 
+			.poema-container p {
+				white-space: pre-line;
+				line-height: 1.8;
+				margin-bottom: 1rem;
+			}
+
+			.poema-container .autor {
+				font-size: 1rem;
+				font-style: italic;
+				color: #555;
+				margin-bottom: 1rem;
+				text-align: right;
+			}
+			.poema-container pre {
+				white-space: pre-wrap; /* Mantiene estructura de texto y se ajusta al contenedor */
+				font-family: var(--font-main);
+				line-height: 1.8;
+				margin-bottom: 1rem;
+			}
+
+			footer {
+				margin-top: 3rem;
+				font-size: 0.9rem;
+				color: #666;
+			}
+			.corazon {
+				/*corazon ultimo*/
+				font-size: 24px;
+				color: gray !important;
+				cursor: pointer;
+				position: absolute;
+				top: 15px;
+				right: 15px;
+				transition: transform 0.2s ease, color 0.3s ease;
+			}
+
+			.corazon.leido {
+				/*corazon ultimo*/
+				color: red !important;
+				transform: scale(1.2);
+			}
+
+			@media (max-width: 600px) {
+				header h1 {
+					font-size: 2rem;
+				}
+
+				.poema-container {
+					padding: 1rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>Literalia</h1>
+			<p>Reflexiones</p>
+		</header>
+
+		<div class="poema-container">
+			<h2>Instantes con sentido</h2>
+			<p>
+				Cuando uno empieza a notar lo efímero de las cosas, también empieza a apreciar lo esencial.
+				Tal vez por eso el tiempo parece más escaso y vivir se vuelve más profundo, pero también más
+				breve...
+			</p>
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Cuando se va entendiendo que todo es pasajero,
 que el brillo de las cosas se apaga en su sendero,
 la vida ya no es meta, ni nombre, ni dinero,
@@ -87,23 +178,42 @@ Y así, cuando el camino se pierda en su desvelo,
 y el último suspiro se eleve rumbo al cielo,
 no habrá temor ni angustia, ni peso en el anhelo:
 solo un alma en silencio, devolviéndose al vuelo.
+			</pre
+			>
+			<p>
+				Al final, todo lo que creemos permanente se disuelve. Y es precisamente cuando aceptamos esa
+				fragilidad que la vida se vuelve más nítida. Lo efímero no es un enemigo, sino un maestro:
+				nos recuerda que nada nos pertenece, salvo el instante en el que respiramos y miramos de
+				frente lo que amamos. El tiempo, cuando se comprende, deja de ser una amenaza y se convierte
+				en un marco: gracias a sus límites, aprendemos a elegir, a soltar lo trivial y a abrazar
+				solo lo que importa. Es entonces cuando vivir se vuelve más intenso… quizá más breve, sí,
+				pero también infinitamente más verdadero. Y tal vez ahí esté la respuesta: no en aferrarnos
+				al mundo, sino en aprender a estar, aunque todo pase. Porque lo esencial nunca se mide en
+				duración, sino en instantes con sentido.
+			</p>
+			<div class="autor">Autor: IF- (11/12/23)(29/07/25)</div>
+			<span class="corazon" data-id="instantesconsentido">&#10084;</span>
+		</div>
 
-Al final, todo lo que creemos permanente se disuelve. Y es precisamente cuando aceptamos esa
-fragilidad que la vida se vuelve más nítida. Lo efímero no es un enemigo, sino un maestro:
-nos recuerda que nada nos pertenece, salvo el instante en el que respiramos y miramos de
-frente lo que amamos. El tiempo, cuando se comprende, deja de ser una amenaza y se convierte
-en un marco: gracias a sus límites, aprendemos a elegir, a soltar lo trivial y a abrazar
-solo lo que importa. Es entonces cuando vivir se vuelve más intenso… quizá más breve, sí,
-pero también infinitamente más verdadero. Y tal vez ahí esté la respuesta: no en aferrarnos
-al mundo, sino en aprender a estar, aunque todo pase. Porque lo esencial nunca se mide en
-duración, sino en instantes con sentido.
+		<div class="poema-container">
+			<h2>Vacío</h2>
+			<pre>
+Vivimos rodeados de cosas, y sin embargo, cada vez más vacíos. Nos enseñan que la felicidad se compra, que vale tanto como el precio de lo que poseemos. Y así, corremos detrás de objetos que brillan solo un instante, para descubrir demasiado tarde que no pueden llenar el silencio de lo que realmente nos falta.
 
----
-title: LAD
-author: Autor: IF-
-year: (08/10/22)
-tags: 
+El materialismo es una promesa rota: nos da la ilusión de control sobre un mundo que, tarde o temprano, nos será arrebatado. Nada de lo que acumulamos nos acompañará más allá de este breve tránsito. Sin embargo, seguimos midiendo nuestra vida por la cantidad y no por la profundidad, por el tener y no por el ser.
 
+Quizá por eso quienes aprenden a mirar más allá de lo tangible encuentran una paz distinta. Descubren que lo esencial nunca se compra: está en una palabra sincera, en una caricia que no espera nada a cambio, en el instante en que alguien nos mira y nos ve de verdad.
+
+Lo material puede hacernos sentir cómodos, pero solo lo esencial nos hace sentir vivos. Y mientras no comprendamos esa diferencia, seguiremos habitando un mundo lleno de cosas… pero vacío de sentido.
+</pre
+			>
+			<div class="autor">Autor: IF- (08/10/22)</div>
+			<span class="corazon" data-id="vacio">&#10084;</span>
+		</div>
+
+		<div class="poema-container">
+			<h2>LAD</h2>
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Bajo el cielo encendido, mientras el viento susurraba historias al pasar,
 tus ojos guardaban un brillo tan profundo que el mundo parecía callar,
 y en aquel espacio sin prisa, donde el tiempo dejaba de gobernar,
@@ -138,13 +248,15 @@ Quizás la vida sólo sea un puñado de instantes que aprendemos a sostener,
 y aquel junto a ti, aunque breve, no dejará nunca de florecer,
 porque hay amores que no necesitan futuro para volver a nacer,
 pues bastan en su esencia, con tan solo existir… para permanecer.
+</pre
+			>
+			<div class="autor">Autor: IF- (01/08/24)</div>
+			<span class="corazon" data-id="lad">&#10084;</span>
+		</div>
 
----
-title: Que nos paso?
-author: Autor: IF-
-year: 
-tags: 
-
+		<div class="poema-container">
+			<h2>Inicio y final</h2>
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Recuerdo los días de sol donde todo empezaba a latir,
 la risa en el viento, los juegos, el mundo aprendiendo a existir,
 miradas robadas en tardes que ardían buscando un sentir,
@@ -164,12 +276,6 @@ Las calles guardaban el eco de todo lo que prometimos,
 las manos buscaban la excusa de un roce que no construimos,
 las tardes hablaban en códigos puros que nunca rompimos,
 y el mundo giraba tan lento en la órbita que descubrimos.
-
----
-title: Que nos paso? 2
-author: Autor: IF-
-year: 
-tags: 
 
 Qué dulce era amarte sin miedo, sin culpas, sin tiempo, sin peso,
 soñar que la vida era simple, que el cielo cabía en un beso,
@@ -196,12 +302,6 @@ no duelen las puertas cerradas si fue necesario cerrar,
 no duele que el viento nos lleve si aún se nos puede encontrar,
 en mundos secretos que el alma aún sabe besar y abrazar.
 
----
-title: Que nos paso? 3
-author: Autor: IF-
-year: 
-tags: 
-
 La vida nos dio otros paisajes, nos puso otras voces, otras manos,
 cambiamos de cielos, de rutas, de puentes, de fuegos lejanos,
 pero algo de ti se mantiene dormido en mis días tempranos,
@@ -221,12 +321,6 @@ Los años escriben sus cartas en hojas que el viento despeina,
 los días se cruzan en calles que guardan su antigua diadema,
 las voces resuenan en tardes bañadas de antigua azucena,
 y todo me lleva de nuevo a la puerta que nunca condena.
-
----
-title: Que nos paso? 4
-author: Autor: IF-
-year: 
-tags: 
 
 Tu risa de entonces se mezcla en los días de lluvia plateada,
 las luces que tiemblan al alba despiertan tu estampa callada,
@@ -253,12 +347,6 @@ mi alma y la tuya serán solo ecos que vagan buscando danzar,
 seremos apenas un soplo, un susurro imposible de hallar,
 y aun así, en la brisa del alba, tu risa me vendrá a besar.
 
----
-title: Que nos paso? 5
-author: Autor: IF-
-year: 
-tags: 
-
 Serás la semilla de todos los sueños que aún voy a sembrar,
 serás la ceniza dorada que el viento no quiso apagar,
 serás la leyenda que a veces mi sangre sabrá recordar,
@@ -284,12 +372,18 @@ así, entre silencios y cantos que el tiempo de lejos llevará,
 así, entre la vida y la muerte que un día me abrazarán ya,
 tu nombre será la semilla que siempre en mi pecho brotará.
 
----
-title: Silencio
-author: Autor: IF-
-year: (17/12/18)
-tags: 
 
+
+			</pre
+			>
+			<div class="autor">Autor: IF- (--/--/--)</div>
+			<span class="corazon" data-id="inicioyfinal">&#10084;</span>
+		</div>
+
+		<div class="poema-container">
+			<h2>Silencio</h2>
+
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Supe que el viento traía noticias de un ciclo cerrado,
 supe que el tiempo marcaba distancias que el alma ha dejado,
 supe que tus pasos heridos buscaban andar otro lado,
@@ -309,13 +403,16 @@ Mi pecho gritaba en su canto queriendo volar hacia ti,
 mi sangre temblaba en los sueños pidiendo llegar hasta mí,
 pero amarte era respetarte, callarte, cuidarte hasta el fin,
 y el alma guardaba sus fuegos temiendo romper el jardín.
+			</pre
+			>
+			<div class="autor">Autor: IF- (17/12/18)</div>
+			<span class="corazon" data-id="silencio">&#10084;</span>
+		</div>
 
----
-title: ...
-author: Autor: IF-
-year: (2020)
-tags: 
+		<div class="poema-container">
+			<h2>...</h2>
 
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Te marchaste en silencio, llevando contigo el brillo de los días,
 y aunque no habitabas mi techo, tu risa llenaba las horas vacías,
 ahora sólo queda el eco de los recuerdos y sus melodías,
@@ -335,13 +432,16 @@ Adiós no es final, me repito, aunque el pecho se ahogue en despedida,
 pues tu viaje es una herida que sangra, pero también da vida,
 y si cumplir tus sueños es la razón por la que hoy estás perdida,
 esperaré en la sombra, hasta que tu risa regrese, encendida.
+			</pre
+			>
+			<div class="autor">Autor: IF- (2020)</div>
+			<span class="corazon" data-id="sintitulo">&#10084;</span>
+		</div>
 
----
-title: Comienzo
-author: Autor: IF-
-year: 
-tags: 
+		<div class="poema-container">
+			<h2>Comienzo</h2>
 
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Te vi entre las horas doradas que canta la tarde al morir,
 y supe en el alma temblando que nunca podría fingir,
 que algo en tu risa me alzaba del miedo, del frío, del gris,
@@ -362,12 +462,15 @@ no vi cuando el sueño en mi pecho comenzó sin querer a crecer,
 sólo sé que al verte en la tarde mi sangre aprendió a renacer,
 y supe que el tiempo contigo sería mi forma de ser.
 
----
-title: Despertar
-author: Autor: IF-
-year: 
-tags: 
+			</pre
+			>
+			<div class="autor">Autor: IF-</div>
+			<span class="corazon" data-id="Comienzo">&#10084;</span>
+		</div>
+		<div class="poema-container">
+			<h2>Despertar</h2>
 
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Y antes de tu luz caminaba perdido en la niebla sin fin,
 mis días rodaban vacíos, sin canto, sin norte, sin mí.
 Mas vino tu risa de mayo, tan pura, tan clara al latir,
@@ -388,12 +491,17 @@ pues vive en mi sangre tu huella, mi fuerza, mi fe, mi razón;
 y mientras respire la tierra y vibre este tenue latir,
 serás en mis días la llama que nunca se quiere extinguir.
 
----
-title: Eras...
-author: Autor: IF-
-year: 
-tags: 
 
+			</pre
+			>
+			<div class="autor">Autor: IF-</div>
+			<span class="corazon" data-id="Despertar">&#10084;</span>
+		</div>
+
+		<div class="poema-container">
+			<h2>Eras...</h2>
+
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Crecimos al filo del viento que alzaba sus himnos de abril,
 jugamos con mapas de estrellas que sólo cabían en mí,
 soñamos en plazas desiertas futuros que no vi venir,
@@ -414,12 +522,18 @@ eras el suspiro en mi pecho, la llama que quiso brotar,
 eras la razón de mis sueños, la risa que vino a sanar,
 eras la promesa del mundo que apenas podía tocar.
 
----
-title: Fui...
-author: Autor: IF-
-year: 
-tags: 
 
+
+			</pre
+			>
+			<div class="autor">Autor: IF-</div>
+			<span class="corazon" data-id="eras">&#10084;</span>
+		</div>
+
+		<div class="poema-container">
+			<h2>Fui...</h2>
+
+			<pre style="font-family: 'Georgia', serif; font-style: italic; color: #bd8f64">
 Pasaban los días y el alma tejía tu rastro en secreto,
 las horas caían despacio bordando tu risa en mi pecho,
 las tardes se hacían suspiros que al verte sabían su derecho,
@@ -440,4 +554,42 @@ fui brisa que roza tu sombra sin nunca poderte alcanzar,
 fui barco perdido en tus mares, sin puerto, sin redes, sin mar,
 fui sueño que nace en la niebla temblando en su ansia de amar.
 
----
+
+
+			</pre
+			>
+			<div class="autor">Autor: IF-</div>
+			<span class="corazon" data-id="eras">&#10084;</span>
+		</div>
+
+		<div class="poema-container">
+			<h2>Proximamente... 10/08/25</h2>
+
+			<div class="autor"></div>
+		</div>
+
+		<footer>&copy; 2025 Literalia. Todos los derechos reservados.</footer>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", () => {
+				const corazones = document.querySelectorAll(".corazon");
+
+				corazones.forEach((corazon) => {
+					const id = corazon.dataset.id;
+
+					// Sólo aplicamos "leído" si está guardado en localStorage
+					if (localStorage.getItem(`leido_${id}`) === "true") {
+						corazon.classList.add("leido");
+					} else {
+						corazon.classList.remove("leido"); // Aseguramos que empiece gris
+					}
+
+					corazon.addEventListener("click", () => {
+						corazon.classList.toggle("leido");
+						localStorage.setItem(`leido_${id}`, corazon.classList.contains("leido"));
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
