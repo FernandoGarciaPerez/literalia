@@ -32,6 +32,7 @@ async function init() {
 
 	wireUI();
 	renderList();
+	readFavorites(); /* */
 }
 
 function wireUI() {
@@ -40,6 +41,29 @@ function wireUI() {
 
 	// ⤵️ ahora “Poema al azar” navega a poema.html
 	DOM.randomBtn.addEventListener("click", navigateRandom);
+
+	/** */
+	// Al volver con el botón “atrás” (page is from bfcache) o al re-mostrar la página:
+	window.addEventListener("pageshow", () => {
+		readFavorites();
+		renderList();
+	});
+
+	// Si la pestaña recupera foco/visibilidad (iOS a veces no dispara pageshow como esperamos)
+	document.addEventListener("visibilitychange", () => {
+		if (document.visibilityState === "visible") {
+			readFavorites();
+			renderList();
+		}
+	});
+
+	// Si cambia localStorage desde otra pestaña/ventana
+	window.addEventListener("storage", (e) => {
+		if (e.key === STORE_KEYS.favorites) {
+			readFavorites();
+			renderList();
+		}
+	});
 }
 
 function renderList() {
