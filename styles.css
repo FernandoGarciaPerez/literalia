@@ -319,3 +319,26 @@ select{
   margin: 0;
 }
 
+@media (max-width: 410px){
+  body{
+    /* misma imagen de fondo que ya usas */
+    background-repeat: repeat;
+    background-position: bottom;  /* del lado derecho -> al centro abajo */
+    background-size: 500px auto;          /* más pequeña y proporcional */
+    background-attachment: scroll;       /* evita comportamientos raros en iOS */
+  }
+
+  .update-info {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted, #666);
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  font-style: italic;
+}
+    /* espacio para que no tape las últimas tarjetas */
+}
+
