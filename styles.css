@@ -32,6 +32,12 @@ body{
     linear-gradient(180deg, #fdf8f3, #fbf4ea 45%, #f8efe5 100%);
   line-height:1.58;
   letter-spacing:.1px;
+
+  /**/
+  background-image: url("images/flor.png"); /* Cambia la ruta a la de tu imagen */
+  background-repeat: no-repeat;
+  background-position: right bottom; /* Ubicación: derecha y abajo */
+  background-size: 600px auto; /* Ajusta el tamaño */
 }
 
 .container{max-width:1000px;margin:0 auto;padding:20px}
