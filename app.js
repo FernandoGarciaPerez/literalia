@@ -31,8 +31,8 @@ async function init() {
 	}
 
 	wireUI();
-	renderList();
-	readFavorites(); /* */
+	readFavorites(); // ⟵ primero sincronizamos favoritos
+	renderList(); // ⟵ luego pintamos la lista
 }
 
 function wireUI() {
@@ -44,7 +44,8 @@ function wireUI() {
 
 	/** */
 	// Al volver con el botón “atrás” (page is from bfcache) o al re-mostrar la página:
-	window.addEventListener("pageshow", () => {
+	window.addEventListener("pageshow", (e) => {
+		// e.persisted === true cuando la página viene del back/forward cache
 		readFavorites();
 		renderList();
 	});
@@ -189,6 +190,12 @@ function slug(s) {
 		.replace(/(^-|-$)/g, "")
 		.slice(0, 80);
 }
+/** */
+function readFavorites() {
+	favorites = new Set(JSON.parse(localStorage.getItem(STORE_KEYS.favorites) || "[]"));
+}
+
+/** */
 function toggleFavorite(id) {
 	if (favorites.has(id)) favorites.delete(id);
 	else favorites.add(id);
