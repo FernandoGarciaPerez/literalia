@@ -442,32 +442,6 @@ amaba el amar sin medida, sin miedo, sin prisa, sin fin.
 
 ---
 
-title: Su
-author: Autor: IF-
-year: 
-tags: 
-
-Me gusta inventar en tus días sorpresas, detalles sencillos que logren brillar,
-un gesto pequeño, un recuerdo escondido, que haga en tus labios la risa brotar,
-no busco grandezas ni joyas eternas, tan solo motivos que puedan sumar,
-pues nada es más grande que ver en tu rostro la dicha sincera de un dulce sonar.
-
-Tu risa me envuelve, se queda en mi alma, y todo lo oscuro parece escapar,
-se encienden mis pasos, florecen mis horas si logro contigo momentos crear,
-detalles que surgen de forma sencilla, de un alma que quiere en tu vida estar,
-regalos que llevan un trozo de cielo y buscan en ti su razón de brillar.
-
-Las flores se tornan en cartas abiertas, los libros en versos que saben cantar,
-un dulce, una nota, un gesto discreto, me basta contigo para imaginar,
-que todo lo bello que guardo en el pecho se vuelve camino dispuesto a entregar,
-y en cada sonrisa que nace en tu cara descubro mi mundo volver a empezar.
-
-Así me descubro feliz en silencio, buscando pretextos de amor para ti,
-llenando de luces tus días cansados, pintando razones para sonreír,
-que todo detalle se quede en tu vida cual huella que nunca se quiera extinguir,
-pues nada me alegra más que en tu mirada el brillo encendido de verte reír.
-
----
 title: En silencio
 author: Autor: IF-
 year: 
@@ -587,7 +561,7 @@ sabrá que en mi historia tu esencia persiste, pues nada en el mundo la podrá b
 
 ---
 
-title: Su
+title: Pequeños motivos
 author: Autor: IF-
 year: 
 tags: 
@@ -638,6 +612,35 @@ Así en nuestro paso se enciende la fuerza, así se construye la forma de andar,
 pues nadie camina con todo completo, y aun con las grietas se puede avanzar,
 las ramas se elevan, las aguas sostienen, el tiempo nos deja su forma de hablar,
 y encuentro en lo visto un sabio mensaje: que siempre hay razones para continuar.
+
+
+---
+
+title: Lo que no muere
+author: Autor: IF-
+year: 
+tags: 
+
+Tu risa no suena, resuena en el fondo, en sitios del pecho que no conocí,
+tus gestos no tocan, despiertan memorias que viven dormidas muy dentro de mí,
+tu voz no pronuncia, susurra en mi mente canciones del alma que saben fluir,
+y en todo lo tuyo descubro lo eterno que existe en lo humano cuando es por ti.
+
+Tu alma me habla sin voz ni palabra, me dice verdades que no sé decir,
+me envuelve en su calma, me guía en la sombra, me enseña que amar también es sentir,
+y cuando te miro no veo un cuerpo, contemplo un misterio dispuesto a latir,
+la luz invisible que late contigo y da a lo vivido razón de existir.
+
+El tiempo no toca lo que en ti habita, no puede borrarlo ni hacerlo cambiar,
+la piel se consume, los años se apagan, mas dentro la llama se queda igual,
+pues todo lo bello que nace en el alma se vuelve infinito, no sabe acabar,
+y ahí en tu mirada descubro ese fuego que nunca el olvido sabrá apagar.
+
+No busco apariencia ni formas perfectas, me basta lo eterno que hay dentro de ti,
+la risa que nace sin causa ni miedo, el alma que el mundo no logra herir,
+porque entre lo efímero y lo que perdura, tu ser verdadero eligió existir,
+y sé que en tu fondo, más puro y más cierto, está lo que siempre me hizo seguir.
+
 
 
 ---
