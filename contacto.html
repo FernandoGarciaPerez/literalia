@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Contacto — Literalia</title>
+		<style>
+			/* CONTENEDOR */
+			.container {
+				max-width: 1100px;
+				margin: auto;
+				padding: 2rem;
+			}
+
+			/* CARD (igual a poemas) */
+			.card {
+				background: #fffaf5;
+				border-radius: 14px;
+				padding: 2rem;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+			}
+
+			/* FORMULARIO */
+			.formulario {
+				display: flex;
+				flex-direction: column;
+				gap: 0.8rem;
+			}
+
+			.formulario label {
+				font-size: 0.9rem;
+				opacity: 0.8;
+			}
+
+			.formulario input,
+			.formulario select,
+			.formulario textarea {
+				background: #fff;
+				border: 1px solid #e6d8c8;
+				border-radius: 10px;
+				padding: 0.6rem 0.7rem;
+				font-family: inherit;
+				font-size: 0.95rem;
+			}
+
+			.formulario textarea {
+				min-height: 180px;
+				resize: vertical;
+			}
+
+			.formulario input:focus,
+			.formulario textarea:focus,
+			.formulario select:focus {
+				outline: none;
+				border-color: #d2b48c;
+			}
+
+			/* CHECKBOX */
+			.checkbox {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.85rem;
+			}
+
+			/* BOTÓN (mismo estilo que Leer / Copiar) */
+			.acciones {
+				margin-top: 1rem;
+			}
+
+			.btn-outline {
+				background: transparent;
+				border: 1px solid #d2b48c;
+				border-radius: 20px;
+				padding: 0.4rem 1rem;
+				cursor: pointer;
+				font-family: inherit;
+				font-size: 0.9rem;
+			}
+
+			.btn-outline:hover {
+				background: #f3e6d8;
+			}
+
+			/* TEXTO */
+			.descripcion {
+				margin-bottom: 1.5rem;
+				font-size: 0.95rem;
+				opacity: 0.8;
+			}
+
+			/* FOOTER */
+			.footer {
+				text-align: center;
+				margin-top: 4rem;
+			}
+
+			.muted {
+				opacity: 0.6;
+			}
+		</style>
+	</head>
+	<body>
+		<main class="container">
+			<h1>Contacto</h1>
+
+			<div class="card formulario-card">
+				<p class="descripcion">Envíanos un comentario o un poema para posible publicación.</p>
+
+				<form action="https://formspree.io/f/TU_ID" method="POST" class="formulario">
+					<label>Tipo de envío</label>
+					<select name="tipo" required>
+						<option value="" disabled selected>Seleccionar</option>
+						<option value="comentario">Comentario</option>
+						<option value="poema">Poema para publicación</option>
+					</select>
+
+					<label>Nombre o seudónimo</label>
+					<input type="text" name="autor" />
+
+					<label>Correo electrónico</label>
+					<input type="email" name="email" required />
+
+					<label>Título (solo para poemas)</label>
+					<input type="text" name="titulo" />
+
+					<label>Contenido</label>
+					<textarea name="mensaje" required></textarea>
+
+					<label class="checkbox">
+						<input type="checkbox" required />
+						Acepto que los poemas no se publican automáticamente
+					</label>
+
+					<div class="acciones">
+						<button type="submit" class="btn-outline">Enviar</button>
+					</div>
+				</form>
+			</div>
+		</main>
+
+		<footer class="container footer">
+			<small class="muted">
+				<a href="index.html">Inicio</a>
+			</small>
+			<br />
+			<small class="muted"> © 2025 Literalia. Todos los derechos reservados. </small>
+		</footer>
+	</body>
+</html>
