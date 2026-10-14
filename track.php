@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+const ANALYTICS_TIMEZONE = 'America/Chicago';
+
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
@@ -37,7 +39,8 @@ $path = sanitize_text((string)($payload['path'] ?? ''), 180);
 $referrer = sanitize_text((string)($payload['referrer'] ?? ''), 240);
 $ip = client_ip();
 $userAgent = sanitize_text((string)($_SERVER['HTTP_USER_AGENT'] ?? ''), 240);
-$now = gmdate('c');
+$timezone = new DateTimeZone(ANALYTICS_TIMEZONE);
+$now = (new DateTimeImmutable('now', $timezone))->format(DateTimeInterface::ATOM);
 
 $analyticsDir = '/var/log/literalia-analytics';
 if (!is_dir($analyticsDir) && !mkdir($analyticsDir, 0775, true) && !is_dir($analyticsDir)) {
@@ -111,6 +114,7 @@ function build_summary(string $eventsPath, string $lastUpdated): array {
 			'home' => 0,
 			'poems' => 0,
 			'ips' => [],
+			'devices' => [],
 		],
 		'days' => [],
 	];
@@ -133,19 +137,23 @@ function build_summary(string $eventsPath, string $lastUpdated): array {
 
 		$date = event_date((string)($event['time'] ?? ''));
 		$ip = sanitize_text((string)($event['ip'] ?? 'unknown'), 64) ?: 'unknown';
+		$device = detect_device((string)($event['userAgent'] ?? ''));
 
 		$summary['totals']['views']++;
 		increment_counter($summary['totals']['ips'], $ip);
+		increment_counter($summary['totals']['devices'], $device);
 
 		if (!isset($summary['days'][$date])) {
 			$summary['days'][$date] = [
 				'views' => 0,
 				'home' => 0,
+				'devices' => [],
 				'poems' => [],
 			];
 		}
 
 		$summary['days'][$date]['views']++;
+		increment_counter($summary['days'][$date]['devices'], $device);
 
 		if ($type === 'home') {
 			$summary['totals']['home']++;
@@ -162,6 +170,8 @@ function build_summary(string $eventsPath, string $lastUpdated): array {
 				'title' => $title,
 				'views' => 0,
 				'ips' => [],
+				'devices' => [],
+				'ipDevices' => [],
 			];
 		}
 
@@ -171,19 +181,33 @@ function build_summary(string $eventsPath, string $lastUpdated): array {
 
 		$summary['days'][$date]['poems'][$poemId]['views']++;
 		increment_counter($summary['days'][$date]['poems'][$poemId]['ips'], $ip);
+		increment_counter($summary['days'][$date]['poems'][$poemId]['devices'], $device);
+
+		if (!isset($summary['days'][$date]['poems'][$poemId]['ipDevices'][$ip])) {
+			$summary['days'][$date]['poems'][$poemId]['ipDevices'][$ip] = [];
+		}
+		increment_counter($summary['days'][$date]['poems'][$poemId]['ipDevices'][$ip], $device);
 	}
 
 	fclose($handle);
 	krsort($summary['days']);
 	sort_ip_counts($summary['totals']['ips']);
+	sort_ip_counts($summary['totals']['devices']);
 
 	foreach ($summary['days'] as &$day) {
+		sort_ip_counts($day['devices']);
+
 		uasort($day['poems'], static function ($a, $b): int {
 			return ((int)($b['views'] ?? 0)) <=> ((int)($a['views'] ?? 0));
 		});
 
 		foreach ($day['poems'] as &$poem) {
 			sort_ip_counts($poem['ips']);
+			sort_ip_counts($poem['devices']);
+			foreach ($poem['ipDevices'] as &$devices) {
+				sort_ip_counts($devices);
+			}
+			unset($devices);
 		}
 		unset($poem);
 	}
@@ -192,11 +216,59 @@ function build_summary(string $eventsPath, string $lastUpdated): array {
 	return $summary;
 }
 
-function event_date(string $time): string {
-	if (preg_match('/^\d{4}-\d{2}-\d{2}/', $time, $matches)) {
-		return $matches[0];
+function detect_device(string $userAgent): string {
+	$ua = strtolower($userAgent);
+
+	if ($ua === '') {
+		return 'Desconocido';
 	}
-	return gmdate('Y-m-d');
+
+	if (strpos($ua, 'curl/') !== false) {
+		return 'Servidor / curl';
+	}
+
+	if (strpos($ua, 'bot') !== false || strpos($ua, 'crawl') !== false || strpos($ua, 'spider') !== false) {
+		return 'Bot / crawler';
+	}
+
+	$device = 'Desconocido';
+	if (strpos($ua, 'iphone') !== false) {
+		$device = 'iPhone';
+	} elseif (strpos($ua, 'ipad') !== false) {
+		$device = 'iPad';
+	} elseif (strpos($ua, 'android') !== false) {
+		$device = 'Android';
+	} elseif (strpos($ua, 'windows') !== false) {
+		$device = 'Windows';
+	} elseif (strpos($ua, 'mac os') !== false || strpos($ua, 'macintosh') !== false) {
+		$device = 'Mac';
+	} elseif (strpos($ua, 'linux') !== false) {
+		$device = 'Linux';
+	}
+
+	$browser = 'Navegador desconocido';
+	if (strpos($ua, 'edg/') !== false || strpos($ua, 'edga/') !== false || strpos($ua, 'edgios/') !== false) {
+		$browser = 'Edge';
+	} elseif (strpos($ua, 'opr/') !== false || strpos($ua, 'opera') !== false) {
+		$browser = 'Opera';
+	} elseif (strpos($ua, 'firefox/') !== false || strpos($ua, 'fxios/') !== false) {
+		$browser = 'Firefox';
+	} elseif (strpos($ua, 'crios/') !== false || strpos($ua, 'chrome/') !== false || strpos($ua, 'chromium/') !== false) {
+		$browser = 'Chrome';
+	} elseif (strpos($ua, 'safari/') !== false) {
+		$browser = 'Safari';
+	}
+
+	return "{$device} / {$browser}";
+}
+
+function event_date(string $time): string {
+	try {
+		$date = new DateTimeImmutable($time);
+		return $date->setTimezone(new DateTimeZone(ANALYTICS_TIMEZONE))->format('Y-m-d');
+	} catch (Exception $error) {
+		return (new DateTimeImmutable('now', new DateTimeZone(ANALYTICS_TIMEZONE)))->format('Y-m-d');
+	}
 }
 
 function increment_counter(array &$counts, string $key): void {
@@ -225,6 +297,8 @@ function render_summary(array $summary): string {
 			$lines[] = 'DIA: ' . $date;
 			$lines[] = 'Visitas del dia: ' . (int)($day['views'] ?? 0);
 			$lines[] = 'Inicio: ' . (int)($day['home'] ?? 0);
+			$lines[] = 'Dispositivos del dia:';
+			append_counter_lines($lines, $day['devices'] ?? [], '- ', 'entrada', 'entradas', '- Sin dispositivos registrados');
 			$lines[] = '';
 			$lines[] = 'Poemas abiertos:';
 
@@ -236,6 +310,15 @@ function render_summary(array $summary): string {
 					$title = (string)($data['title'] ?? $id);
 					$views = (int)($data['views'] ?? 0);
 					$lines[] = "- {$title} ({$id}): {$views}";
+					$lines[] = '  Dispositivos:';
+					append_counter_lines(
+						$lines,
+						$data['devices'] ?? [],
+						'  - ',
+						'entrada',
+						'entradas',
+						'  - Sin dispositivos registrados'
+					);
 					$lines[] = '  IPs:';
 
 					$ips = $data['ips'] ?? [];
@@ -245,6 +328,15 @@ function render_summary(array $summary): string {
 						foreach ($ips as $ip => $count) {
 							$entryLabel = (int)$count === 1 ? 'entrada' : 'entradas';
 							$lines[] = "  - {$ip}: {$count} {$entryLabel}";
+							$lines[] = '    Dispositivos:';
+							append_counter_lines(
+								$lines,
+								$data['ipDevices'][$ip] ?? [],
+								'    - ',
+								'entrada',
+								'entradas',
+								'    - Sin dispositivos registrados'
+							);
 						}
 					}
 				}
@@ -271,5 +363,36 @@ function render_summary(array $summary): string {
 		}
 	}
 
+	$lines[] = '';
+	$lines[] = 'Dispositivos totales:';
+	append_counter_lines(
+		$lines,
+		$totals['devices'] ?? [],
+		'- ',
+		'entrada',
+		'entradas',
+		'- Sin dispositivos registrados'
+	);
+
 	return implode(PHP_EOL, $lines) . PHP_EOL;
+}
+
+function append_counter_lines(
+	array &$lines,
+	array $counts,
+	string $prefix,
+	string $singleLabel,
+	string $pluralLabel,
+	string $emptyLine
+): void {
+	if (!$counts) {
+		$lines[] = $emptyLine;
+		return;
+	}
+
+	foreach ($counts as $label => $count) {
+		$count = (int)$count;
+		$entryLabel = $count === 1 ? $singleLabel : $pluralLabel;
+		$lines[] = "{$prefix}{$label}: {$count} {$entryLabel}";
+	}
 }
