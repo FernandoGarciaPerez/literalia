@@ -581,7 +581,9 @@ select:focus,
 }
 
 .contact-card {
+	height: auto;
 	margin-top: 10px;
+	overflow: visible;
 	padding: 24px;
 }
 
