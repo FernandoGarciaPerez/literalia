@@ -66,43 +66,17 @@ if (!$lockHandle) {
 
 flock($lockHandle, LOCK_EX);
 
+$eventsPath = $analyticsDir . DIRECTORY_SEPARATOR . 'events.log';
 file_put_contents(
-	$analyticsDir . DIRECTORY_SEPARATOR . 'events.log',
+	$eventsPath,
 	json_encode($event, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL,
 	FILE_APPEND | LOCK_EX
 );
 
-$summaryPath = $analyticsDir . DIRECTORY_SEPARATOR . 'summary.json';
-$summary = [
-	'total' => 0,
-	'home' => 0,
-	'poems' => [],
-	'lastUpdated' => null,
-];
-
-if (is_file($summaryPath)) {
-	$existing = json_decode((string)file_get_contents($summaryPath), true);
-	if (is_array($existing)) {
-		$summary = array_replace_recursive($summary, $existing);
-	}
-}
-
-$summary['total'] = (int)$summary['total'] + 1;
-$summary['lastUpdated'] = $now;
-
-if ($type === 'home') {
-	$summary['home'] = (int)$summary['home'] + 1;
-} else {
-	$key = $poemId !== '' ? $poemId : 'sin-id';
-	if (!isset($summary['poems'][$key]) || !is_array($summary['poems'][$key])) {
-		$summary['poems'][$key] = ['title' => $title, 'views' => 0];
-	}
-	$summary['poems'][$key]['title'] = $title !== '' ? $title : ($summary['poems'][$key]['title'] ?? '');
-	$summary['poems'][$key]['views'] = (int)$summary['poems'][$key]['views'] + 1;
-}
+$summary = build_summary($eventsPath, $now);
 
 file_put_contents(
-	$summaryPath,
+	$analyticsDir . DIRECTORY_SEPARATOR . 'summary.json',
 	json_encode($summary, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
 );
 file_put_contents($analyticsDir . DIRECTORY_SEPARATOR . 'summary.txt', render_summary($summary));
@@ -129,26 +103,171 @@ function client_ip(): string {
 	return 'unknown';
 }
 
+function build_summary(string $eventsPath, string $lastUpdated): array {
+	$summary = [
+		'lastUpdated' => $lastUpdated,
+		'totals' => [
+			'views' => 0,
+			'home' => 0,
+			'poems' => 0,
+			'ips' => [],
+		],
+		'days' => [],
+	];
+
+	$handle = fopen($eventsPath, 'r');
+	if (!$handle) {
+		return $summary;
+	}
+
+	while (($line = fgets($handle)) !== false) {
+		$event = json_decode(trim($line), true);
+		if (!is_array($event)) {
+			continue;
+		}
+
+		$type = (string)($event['type'] ?? '');
+		if (!in_array($type, ['home', 'poem'], true)) {
+			continue;
+		}
+
+		$date = event_date((string)($event['time'] ?? ''));
+		$ip = sanitize_text((string)($event['ip'] ?? 'unknown'), 64) ?: 'unknown';
+
+		$summary['totals']['views']++;
+		increment_counter($summary['totals']['ips'], $ip);
+
+		if (!isset($summary['days'][$date])) {
+			$summary['days'][$date] = [
+				'views' => 0,
+				'home' => 0,
+				'poems' => [],
+			];
+		}
+
+		$summary['days'][$date]['views']++;
+
+		if ($type === 'home') {
+			$summary['totals']['home']++;
+			$summary['days'][$date]['home']++;
+			continue;
+		}
+
+		$summary['totals']['poems']++;
+		$poemId = sanitize_text((string)($event['poemId'] ?? ''), 120) ?: 'sin-id';
+		$title = sanitize_text((string)($event['title'] ?? ''), 180) ?: $poemId;
+
+		if (!isset($summary['days'][$date]['poems'][$poemId])) {
+			$summary['days'][$date]['poems'][$poemId] = [
+				'title' => $title,
+				'views' => 0,
+				'ips' => [],
+			];
+		}
+
+		if ($title !== $poemId) {
+			$summary['days'][$date]['poems'][$poemId]['title'] = $title;
+		}
+
+		$summary['days'][$date]['poems'][$poemId]['views']++;
+		increment_counter($summary['days'][$date]['poems'][$poemId]['ips'], $ip);
+	}
+
+	fclose($handle);
+	krsort($summary['days']);
+	sort_ip_counts($summary['totals']['ips']);
+
+	foreach ($summary['days'] as &$day) {
+		uasort($day['poems'], static function ($a, $b): int {
+			return ((int)($b['views'] ?? 0)) <=> ((int)($a['views'] ?? 0));
+		});
+
+		foreach ($day['poems'] as &$poem) {
+			sort_ip_counts($poem['ips']);
+		}
+		unset($poem);
+	}
+	unset($day);
+
+	return $summary;
+}
+
+function event_date(string $time): string {
+	if (preg_match('/^\d{4}-\d{2}-\d{2}/', $time, $matches)) {
+		return $matches[0];
+	}
+	return gmdate('Y-m-d');
+}
+
+function increment_counter(array &$counts, string $key): void {
+	if (!isset($counts[$key])) {
+		$counts[$key] = 0;
+	}
+	$counts[$key]++;
+}
+
+function sort_ip_counts(array &$counts): void {
+	arsort($counts, SORT_NUMERIC);
+}
+
 function render_summary(array $summary): string {
 	$lines = [];
-	$lines[] = 'Última actualización: ' . ($summary['lastUpdated'] ?? '-');
-	$lines[] = 'Visitas totales: ' . (int)($summary['total'] ?? 0);
-	$lines[] = 'Inicio: ' . (int)($summary['home'] ?? 0);
+	$totals = $summary['totals'] ?? [];
+	$days = $summary['days'] ?? [];
+
+	$lines[] = 'Ultima actualizacion: ' . ($summary['lastUpdated'] ?? '-');
 	$lines[] = '';
-	$lines[] = 'Poemas abiertos:';
 
-	$poems = $summary['poems'] ?? [];
-	uasort($poems, static function ($a, $b): int {
-		return ((int)($b['views'] ?? 0)) <=> ((int)($a['views'] ?? 0));
-	});
-
-	if (!$poems) {
-		$lines[] = '- Sin aperturas registradas';
+	if (!$days) {
+		$lines[] = 'Sin visitas registradas';
 	} else {
-		foreach ($poems as $id => $data) {
-			$title = (string)($data['title'] ?? $id);
-			$views = (int)($data['views'] ?? 0);
-			$lines[] = "- {$title} ({$id}): {$views}";
+		foreach ($days as $date => $day) {
+			$lines[] = 'DIA: ' . $date;
+			$lines[] = 'Visitas del dia: ' . (int)($day['views'] ?? 0);
+			$lines[] = 'Inicio: ' . (int)($day['home'] ?? 0);
+			$lines[] = '';
+			$lines[] = 'Poemas abiertos:';
+
+			$poems = $day['poems'] ?? [];
+			if (!$poems) {
+				$lines[] = '- Sin aperturas registradas';
+			} else {
+				foreach ($poems as $id => $data) {
+					$title = (string)($data['title'] ?? $id);
+					$views = (int)($data['views'] ?? 0);
+					$lines[] = "- {$title} ({$id}): {$views}";
+					$lines[] = '  IPs:';
+
+					$ips = $data['ips'] ?? [];
+					if (!$ips) {
+						$lines[] = '  - Sin IP registrada';
+					} else {
+						foreach ($ips as $ip => $count) {
+							$entryLabel = (int)$count === 1 ? 'entrada' : 'entradas';
+							$lines[] = "  - {$ip}: {$count} {$entryLabel}";
+						}
+					}
+				}
+			}
+
+			$lines[] = '';
+		}
+	}
+
+	$lines[] = 'RESUMEN TOTAL DE TODO EL TIEMPO';
+	$lines[] = 'Visitas totales: ' . (int)($totals['views'] ?? 0);
+	$lines[] = 'Inicio total: ' . (int)($totals['home'] ?? 0);
+	$lines[] = 'Poemas abiertos total: ' . (int)($totals['poems'] ?? 0);
+	$lines[] = '';
+	$lines[] = 'IPs totales:';
+
+	$ips = $totals['ips'] ?? [];
+	if (!$ips) {
+		$lines[] = '- Sin IPs registradas';
+	} else {
+		foreach ($ips as $ip => $count) {
+			$entryLabel = (int)$count === 1 ? 'entrada' : 'entradas';
+			$lines[] = "- {$ip}: {$count} {$entryLabel}";
 		}
 	}
 
