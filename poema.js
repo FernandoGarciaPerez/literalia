@@ -6,7 +6,7 @@ import {
 	readFavoriteIds,
 	toggleFavoriteId,
 } from "./poems.js";
-import {trackPoemView} from "./analytics.js?v=20261014-analytics";
+import {trackPoemView} from "./analytics.js?v=20261014-mobile-cache";
 
 const EL = {
 	title: document.getElementById("poemTitle"),
