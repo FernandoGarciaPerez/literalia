@@ -275,27 +275,14 @@ select:focus,
 
 .card {
 	position: relative;
-	display: block;
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
 	height: 158px;
-}
-
-.card-inner {
-	position: relative;
-	height: 100%;
-}
-
-.card-face {
-	height: 100%;
 	border: 1px solid rgba(222, 208, 191, 0.92);
 	border-radius: var(--radius);
 	background: var(--card);
 	box-shadow: var(--soft-shadow);
-}
-
-.card-front {
-	display: flex;
-	flex-direction: column;
-	gap: 9px;
 	padding: 18px;
 	overflow: hidden;
 	transition:
@@ -303,7 +290,7 @@ select:focus,
 		box-shadow 0.2s ease;
 }
 
-.card:hover .card-front {
+.card:hover {
 	border-color: color-mix(in srgb, var(--sage) 40%, var(--border));
 	box-shadow: var(--shadow);
 }
@@ -342,10 +329,6 @@ select:focus,
 	font-variant-numeric: oldstyle-nums;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-}
-
-.card-preview {
-	display: none;
 }
 
 .card-actions,
@@ -513,8 +496,12 @@ select:focus,
 }
 
 .poem-container {
-	width: min(820px, calc(100% - 32px));
+	width: min(900px, calc(100% - 32px));
 	margin: 0 auto;
+}
+
+.poem-tools {
+	padding: 0 0 2px;
 }
 
 .topbar {
@@ -542,10 +529,10 @@ select:focus,
 }
 
 .poem-title {
-	margin: 0 0 8px;
-	color: var(--accent-dark);
-	font-size: 30px;
-	line-height: 1.12;
+	margin: 0 0 14px;
+	color: var(--accent);
+	font-size: 31px;
+	line-height: 1.2;
 	text-align: left;
 }
 
@@ -557,15 +544,15 @@ select:focus,
 
 .poem-actions {
 	justify-content: flex-start;
-	margin-bottom: 24px;
+	margin-bottom: 12px;
 }
 
 .poem-body {
-	margin: 8px auto 26px;
-	padding: 26px 34px 36px;
-	border: 1px solid rgba(222, 208, 191, 0.92);
-	border-radius: 16px;
-	background: rgba(255, 253, 248, 0.9);
+	margin: 12px 0 24px;
+	padding: 20px 24px 24px;
+	border: 1px solid var(--border);
+	border-radius: 18px;
+	background: linear-gradient(180deg, #fffdf9, #fff9f0);
 	box-shadow: var(--shadow);
 }
 
@@ -575,9 +562,9 @@ select:focus,
 	overflow-wrap: anywhere;
 	color: var(--verse-color);
 	font-family: var(--font-main);
-	font-size: 18px;
+	font-size: 17px;
 	font-style: italic;
-	line-height: 1.9;
+	line-height: 1.8;
 }
 
 .poem-nav {
@@ -657,25 +644,17 @@ select:focus,
 	}
 }
 
-@media (hover: none), (pointer: coarse) {
-	.card-preview {
-		display: none;
-	}
-
-	.card-inner,
-	.card-face {
-		height: 100%;
-	}
-}
-
 @media (max-width: 800px) {
 	.app-header {
 		align-items: flex-start;
 		flex-direction: column;
+		gap: 12px;
 	}
 
 	.site-nav {
+		width: 100%;
 		justify-content: flex-start;
+		gap: 14px;
 	}
 
 	.summary-strip {
@@ -706,6 +685,10 @@ select:focus,
 		opacity: 0.2;
 	}
 
+	.poem-page::before {
+		opacity: 0.1;
+	}
+
 	h1 {
 		font-size: 30px;
 	}
@@ -718,27 +701,38 @@ select:focus,
 		grid-template-columns: 1fr;
 	}
 
+	.card {
+		height: 148px;
+	}
+
 	.poem-container {
 		width: min(100% - 24px, 820px);
 	}
 
 	.poem-title {
-		font-size: 26px;
+		font-size: 27px;
 	}
 
 	.poem-body {
-		padding: 24px 18px 28px;
-		border-radius: 14px;
+		padding: 18px;
+		border-radius: 16px;
 	}
 
 	.poem-body pre {
 		font-size: 17px;
-		line-height: 1.82;
+		line-height: 1.8;
 	}
 
-	.poem-footer {
-		flex-wrap: wrap;
-		padding-bottom: calc(24px + env(safe-area-inset-bottom));
+	.poem-actions {
+		gap: 8px;
+		overflow-x: auto;
+		flex-wrap: nowrap;
+		padding-bottom: 4px;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.poem-actions .btn {
+		flex: 0 0 auto;
 	}
 
 	.hide-sm {

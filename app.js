@@ -131,7 +131,6 @@ function renderCard(poem) {
 	card.dataset.id = poem.id;
 	node.querySelector(".card-title").textContent = poem.title;
 	node.querySelector(".card-meta").textContent = metaText(poem);
-	node.querySelector(".card-preview").textContent = previewText(poem.content);
 
 	updateFavoriteButton(favoriteButton, favorites.has(poem.id));
 	favoriteButton.addEventListener("click", () => {
@@ -183,11 +182,6 @@ function navigateRandom() {
 
 function showMessage(message) {
 	DOM.list.innerHTML = `<div class="card empty-state"><p>${message}</p></div>`;
-}
-
-function previewText(content) {
-	const text = content.replace(/\s+/g, " ").trim();
-	return text.length > 125 ? `${text.slice(0, 125).trim()}...` : text;
 }
 
 function flash(element, message) {

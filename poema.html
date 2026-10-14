@@ -8,7 +8,7 @@
 		<meta name="color-scheme" content="light" />
 		<title>Poema — Literalia</title>
 	</head>
-	<body>
+	<body class="poem-page">
 		<header class="app-header container">
 			<a class="brand brand-link" href="index.html" aria-label="Ir al inicio de Literalia">
 				<span class="logo" aria-hidden="true"></span>
@@ -24,13 +24,12 @@
 		</header>
 
 		<main class="poem-container">
+			<section class="poem-tools">
 			<div class="topbar">
 				<a id="backBtn" class="back-btn" href="index.html" aria-label="Volver">
 					← <span class="hide-sm">Volver</span>
 				</a>
 			</div>
-			<section class="poem-body">
-				<h1 class="poem-title" id="poemTitle">Cargando...</h1>
 				<p class="poem-meta" id="poemMeta"></p>
 				<div class="poem-actions">
 					<button id="favBtn" class="btn" type="button" aria-pressed="false">♡ Favorito</button>
@@ -38,6 +37,9 @@
 					<button id="shareBtn" class="btn ghost" type="button">Compartir</button>
 					<span id="poemStatus" class="status" role="status" aria-live="polite"></span>
 				</div>
+			</section>
+			<section class="poem-body">
+				<h1 class="poem-title" id="poemTitle">Cargando...</h1>
 				<pre id="poemContent"></pre>
 			</section>
 			<div class="poem-nav">
