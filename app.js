@@ -7,7 +7,7 @@ import {
 	readFavoriteIds,
 	toggleFavoriteId,
 } from "./poems.js";
-import {trackHomeView} from "./analytics.js";
+import {trackHomeView} from "./analytics.js?v=20261014-analytics";
 
 const DOM = {
 	list: document.getElementById("poemList"),
