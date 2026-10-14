@@ -1,0 +1,10 @@
+{
+	"name": "literalia",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"check": "node --check app.js && node --check poema.js && node --check poems.js && node --check contacto.js && node --check analytics.js",
+		"serve": "npx serve ."
+	}
+}

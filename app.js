@@ -1,4 +1,13 @@
-/* Poemario – Lista (sin modal). “Leer” y “Poema al azar” navegan a poema.html */
+import {
+	copyText,
+	formatPoemText,
+	loadPoems,
+	matchesPoem,
+	metaText,
+	readFavoriteIds,
+	toggleFavoriteId,
+} from "./poems.js";
+import {trackHomeView} from "./analytics.js";
 
 const DOM = {
 	list: document.getElementById("poemList"),
@@ -6,233 +15,192 @@ const DOM = {
 	filter: document.getElementById("filterSelect"),
 	randomBtn: document.getElementById("randomBtn"),
 	cardTpl: document.getElementById("poemCardTpl"),
+	tagFilters: document.getElementById("tagFilters"),
+	poemCount: document.getElementById("poemCount"),
+	favoriteCountNumber: document.getElementById("favoriteCountNumber"),
+	favoriteCount: document.getElementById("favoriteCount"),
 };
 
-const STORE_KEYS = {favorites: "poemario:favorites"};
-let POEMS = [];
-let FILTERED = [];
-let favorites = new Set(JSON.parse(localStorage.getItem(STORE_KEYS.favorites) || "[]"));
+let poems = [];
+let filtered = [];
+let favorites = readFavoriteIds();
+let activeTag = "all";
 
 init();
 
 async function init() {
 	try {
-		const raw = await fetch("poemas.txt", {cache: "no-store"}).then((r) => r.text());
-		POEMS = parsePoems(raw).map((p, idx) => ({
-			...p,
-			id: slug(`${p.title}-${p.author}`) || `poema-${idx}`,
-			index: idx,
-		}));
-	} catch (e) {
-		console.error("Error cargando poemas.txt", e);
-		DOM.list.innerHTML = `<div class="card"><p>No se pudo cargar <code>poemas.txt</code>. Asegúrate de servir los archivos desde un servidor.</p></div>`;
+		poems = await loadPoems();
+	} catch (error) {
+		console.error("Error cargando poemas.txt", error);
+		showMessage("No se pudo cargar poemas.txt. Sirve el sitio desde un servidor local o hosting.");
 		DOM.list.setAttribute("aria-busy", "false");
 		return;
 	}
 
+	DOM.poemCount.textContent = poems.length;
+	trackHomeView();
+	renderTagFilters();
 	wireUI();
-	readFavorites(); // ⟵ primero sincronizamos favoritos
-	renderList(); // ⟵ luego pintamos la lista
+	renderList();
 }
 
 function wireUI() {
 	DOM.search.addEventListener("input", renderList);
 	DOM.filter.addEventListener("change", renderList);
-
-	// ⤵️ ahora “Poema al azar” navega a poema.html
 	DOM.randomBtn.addEventListener("click", navigateRandom);
 
-	/** */
-	// Al volver con el botón “atrás” (page is from bfcache) o al re-mostrar la página:
-	window.addEventListener("pageshow", (e) => {
-		// e.persisted === true cuando la página viene del back/forward cache
-		readFavorites();
+	window.addEventListener("pageshow", syncFavorites);
+	document.addEventListener("visibilitychange", () => {
+		if (document.visibilityState === "visible") syncFavorites();
+	});
+	window.addEventListener("storage", syncFavorites);
+}
+
+function syncFavorites(event) {
+	if (event?.key && event.key !== "poemario:favorites") return;
+	favorites = readFavoriteIds();
+	renderList();
+}
+
+function renderTagFilters() {
+	const tags = [...new Set(poems.flatMap((poem) => poem.tags || []))]
+		.filter(Boolean)
+		.sort((a, b) => a.localeCompare(b, "es"));
+
+	DOM.tagFilters.innerHTML = "";
+	DOM.tagFilters.appendChild(createTagButton("all", "Todos"));
+
+	for (const tag of tags) {
+		DOM.tagFilters.appendChild(createTagButton(tag, tag));
+	}
+}
+
+function createTagButton(value, label) {
+	const button = document.createElement("button");
+	button.type = "button";
+	button.className = "tag-chip";
+	button.textContent = label;
+	button.dataset.tag = value;
+	button.setAttribute("aria-pressed", String(value === activeTag));
+	button.addEventListener("click", () => {
+		activeTag = value;
+		document.querySelectorAll(".tag-chip").forEach((chip) => {
+			chip.setAttribute("aria-pressed", String(chip.dataset.tag === activeTag));
+		});
 		renderList();
 	});
-
-	// Si la pestaña recupera foco/visibilidad (iOS a veces no dispara pageshow como esperamos)
-	document.addEventListener("visibilitychange", () => {
-		if (document.visibilityState === "visible") {
-			readFavorites();
-			renderList();
-		}
-	});
-
-	// Si cambia localStorage desde otra pestaña/ventana
-	window.addEventListener("storage", (e) => {
-		if (e.key === STORE_KEYS.favorites) {
-			readFavorites();
-			renderList();
-		}
-	});
+	return button;
 }
 
 function renderList() {
 	DOM.list.setAttribute("aria-busy", "true");
-	const q = DOM.search.value.trim().toLowerCase();
-	const onlyFavs = DOM.filter.value === "favorites";
+	const query = DOM.search.value.trim();
+	const onlyFavorites = DOM.filter.value === "favorites";
 
-	FILTERED = POEMS.filter((p) => {
-		if (onlyFavs && !favorites.has(p.id)) return false;
-		if (!q) return true;
-		const blob = `${p.title} ${p.author} ${p.year || ""} ${p.tags?.join(" ") || ""} ${
-			p.content
-		}`.toLowerCase();
-		return blob.includes(q);
+	filtered = poems.filter((poem) => {
+		if (onlyFavorites && !favorites.has(poem.id)) return false;
+		if (activeTag !== "all" && !poem.tags?.includes(activeTag)) return false;
+		return matchesPoem(poem, query);
 	});
 
 	DOM.list.innerHTML = "";
-	if (!FILTERED.length) {
-		DOM.list.innerHTML = `<div class="card"><p>No hay resultados.</p></div>`;
+	DOM.randomBtn.disabled = filtered.length === 0;
+	updateFavoriteCount();
+
+	if (!filtered.length) {
+		showMessage(onlyFavorites ? "No tienes poemas favoritos todavía." : "No hay resultados.");
 		DOM.list.setAttribute("aria-busy", "false");
 		return;
 	}
 
-	const frag = document.createDocumentFragment();
-	for (const p of FILTERED) {
-		const node = DOM.cardTpl.content.cloneNode(true);
-		const card = node.querySelector(".card");
-		card.dataset.id = p.id;
-
-		node.querySelector(".card-title").textContent = p.title;
-		node.querySelector(".card-meta").textContent = metaText(p);
-
-		const favBtn = node.querySelector(".fav-toggle");
-		favBtn.dataset.id = p.id;
-
-		// Estado inicial según localStorage
-		const isFav = favorites.has(p.id);
-		favBtn.classList.toggle("active", isFav);
-		favBtn.setAttribute("aria-pressed", String(isFav));
-		favBtn.textContent = isFav ? "❤️" : "🤍";
-
-		// Click: alternar favorito + UI
-		favBtn.addEventListener("click", () => {
-			toggleFavorite(p.id); // actualiza el Set + localStorage
-			const now = favorites.has(p.id);
-			favBtn.classList.toggle("active", now);
-			favBtn.setAttribute("aria-pressed", String(now));
-			favBtn.textContent = now ? "❤️" : "🤍";
-
-			// si estás filtrando por favoritos, vuelve a renderizar la lista
-			if (DOM.filter.value === "favorites") renderList();
-		});
-
-		// ⤵️ “Leer” ahora va a poema.html
-		node.querySelector('[data-action="open"]').addEventListener("click", () => goToPoem(p.id));
-
-		node.querySelector('[data-action="copy"]').addEventListener("click", async () => {
-			await copyPoem(p);
-			flash(card, "Copiado");
-		});
-
-		frag.appendChild(node);
+	const fragment = document.createDocumentFragment();
+	for (const poem of filtered) {
+		fragment.appendChild(renderCard(poem));
 	}
-	DOM.list.appendChild(frag);
+
+	DOM.list.appendChild(fragment);
 	DOM.list.setAttribute("aria-busy", "false");
 }
 
-/* ---------- Navegación ---------- */
+function renderCard(poem) {
+	const node = DOM.cardTpl.content.cloneNode(true);
+	const card = node.querySelector(".card");
+	const favoriteButton = node.querySelector(".fav-toggle");
+
+	card.dataset.id = poem.id;
+	node.querySelector(".card-title").textContent = poem.title;
+	node.querySelector(".card-meta").textContent = metaText(poem);
+	node.querySelector(".card-preview").textContent = previewText(poem.content);
+
+	updateFavoriteButton(favoriteButton, favorites.has(poem.id));
+	favoriteButton.addEventListener("click", () => {
+		favorites = toggleFavoriteId(favorites, poem.id);
+		updateFavoriteButton(favoriteButton, favorites.has(poem.id));
+		if (DOM.filter.value === "favorites") renderList();
+		else updateFavoriteCount();
+	});
+
+	node.querySelector('[data-action="open"]').addEventListener("click", () => goToPoem(poem.id));
+	node.querySelector('[data-action="copy"]').addEventListener("click", async () => {
+		try {
+			await copyText(formatPoemText(poem));
+			flash(card, "Copiado");
+		} catch {
+			flash(card, "No se pudo copiar");
+		}
+	});
+	card.addEventListener("click", (event) => {
+		if (event.target.closest("button")) return;
+		goToPoem(poem.id);
+	});
+
+	return node;
+}
+
+function updateFavoriteButton(button, isFavorite) {
+	button.classList.toggle("active", isFavorite);
+	button.setAttribute("aria-pressed", String(isFavorite));
+	button.setAttribute("aria-label", isFavorite ? "Quitar de favoritos" : "Marcar como favorito");
+	button.title = isFavorite ? "Quitar de favoritos" : "Marcar como favorito";
+	button.textContent = isFavorite ? "♥" : "♡";
+}
+
+function updateFavoriteCount() {
+	DOM.favoriteCountNumber.textContent = favorites.size;
+	DOM.favoriteCount.textContent = favorites.size === 1 ? "favorito" : "favoritos";
+}
+
 function goToPoem(id) {
 	window.location.href = `poema.html?id=${encodeURIComponent(id)}`;
 }
+
 function navigateRandom() {
-	const source =
-		DOM.filter.value === "favorites" ? POEMS.filter((p) => favorites.has(p.id)) : POEMS;
-	if (!source.length) return;
-	const item = source[Math.floor(Math.random() * source.length)];
-	goToPoem(item.id);
+	if (!filtered.length) return;
+	const poem = filtered[Math.floor(Math.random() * filtered.length)];
+	goToPoem(poem.id);
 }
 
-/* ---------- Utilidades ---------- */
-function parsePoems(text) {
-	const norm = text.replace(/\r\n?/g, "\n");
-	const blocks = norm
-		.split(/^\s*---\s*$/m)
-		.map((s) => s.trim())
-		.filter(Boolean);
-	const poems = [];
-	for (const block of blocks) {
-		const parts = block.split(/\n{2,}/);
-		const rawHeader = parts.shift() || "";
-		const body = parts.join("\n\n").trim();
-		const header = {};
-		rawHeader.split(/\n/).forEach((line) => {
-			const m = line.match(/^([\w\-]+)\s*:\s*(.+)$/);
-			if (m) header[m[1].trim().toLowerCase()] = m[2].trim();
-		});
-		const title = header.title || "Sin título";
-		const author = header.author || "Anónimo";
-		const year = header.year || "";
-		const tags = header.tags
-			? header.tags
-					.split(",")
-					.map((s) => s.trim())
-					.filter(Boolean)
-			: [];
-		if (title || body) poems.push({title, author, year, tags, content: body});
-	}
-	return poems;
-}
-function metaText(p) {
-	const a = [];
-	if (p.author) a.push(p.author);
-	if (p.year) a.push(p.year);
-	if (p.tags?.length) a.push(p.tags.join(" · "));
-	return a.join(" — ");
-}
-function slug(s) {
-	return s
-		.toLowerCase()
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/(^-|-$)/g, "")
-		.slice(0, 80);
-}
-/** */
-function readFavorites() {
-	favorites = new Set(JSON.parse(localStorage.getItem(STORE_KEYS.favorites) || "[]"));
+function showMessage(message) {
+	DOM.list.innerHTML = `<div class="card empty-state"><p>${message}</p></div>`;
 }
 
-/** */
-function toggleFavorite(id) {
-	if (favorites.has(id)) favorites.delete(id);
-	else favorites.add(id);
-	localStorage.setItem(STORE_KEYS.favorites, JSON.stringify([...favorites]));
+function previewText(content) {
+	const text = content.replace(/\s+/g, " ").trim();
+	return text.length > 125 ? `${text.slice(0, 125).trim()}...` : text;
 }
-async function copyPoem(p) {
-	const text = `${p.title}\n${metaText(p)}\n\n${p.content}`;
-	await navigator.clipboard.writeText(text);
-}
-function flash(el, msg) {
+
+function flash(element, message) {
 	const tip = document.createElement("div");
-	tip.textContent = msg;
-	Object.assign(tip.style, {
-		position: "absolute",
-		zIndex: 2,
-		left: "50%",
-		top: "0",
-		marginTop: "10px",
-		padding: "6px 10px",
-		borderRadius: "10px",
-		border: "1px solid var(--border)",
-		background: "var(--card)",
-		color: "var(--fg)",
-		boxShadow: "var(--shadow)",
-		fontSize: "12px",
-		opacity: "0",
-		transform: "translate(-50%, -6px)",
-		transition: "opacity .15s ease, transform .25s ease",
-	});
-	(el.closest(".card") || el).appendChild(tip);
+	tip.textContent = message;
+	tip.className = "toast";
+	(element.closest(".card") || element).appendChild(tip);
+
 	requestAnimationFrame(() => {
-		tip.style.opacity = "1";
-		tip.style.transform = "translate(-50%, 0)";
+		tip.classList.add("show");
 	});
 	setTimeout(() => {
-		tip.style.opacity = "0";
-		tip.style.transform = "translate(-50%,-8px)";
+		tip.classList.remove("show");
 		setTimeout(() => tip.remove(), 220);
 	}, 1200);
 }

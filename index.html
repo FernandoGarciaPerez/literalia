@@ -4,103 +4,95 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/png" href="images/pluma2.png" />
-		<title>Literalia</title>
-		<!-- Fuentes elegantes -->
-
 		<link rel="stylesheet" href="styles.css" />
 		<meta name="color-scheme" content="light" />
+		<title>Literalia</title>
 	</head>
 	<body>
 		<header class="app-header container">
-			<div class="brand">
+			<a class="brand brand-link" href="index.html" aria-label="Ir al inicio de Literalia">
 				<span class="logo" aria-hidden="true"></span>
 				<div>
 					<h1>Literalia</h1>
 					<p class="tagline">Reflexiones</p>
 				</div>
-			</div>
+			</a>
+			<nav class="site-nav" aria-label="Navegación principal">
+				<a href="index.html" aria-current="page">Inicio</a>
+				<a href="contacto.html">Contacto</a>
+			</nav>
 		</header>
 
 		<main class="container">
+			<section class="summary-strip" aria-label="Resumen del poemario">
+				<div>
+					<strong id="poemCount">...</strong>
+					<span>textos</span>
+				</div>
+				<div>
+					<strong id="favoriteCountNumber">0</strong>
+					<span id="favoriteCount">favoritos</span>
+				</div>
+			</section>
+
 			<section class="toolbar">
 				<div class="search-wrap">
 					<input
 						id="searchInput"
 						type="search"
-						placeholder="Buscar por título, autor o texto…"
+						placeholder="Buscar por título, autor o texto..."
 						aria-label="Buscar poemas"
 					/>
 				</div>
 				<div class="filters">
-					<select id="filterSelect" aria-label="Filtrar">
+					<select id="filterSelect" aria-label="Filtrar poemas">
 						<option value="all">Todos</option>
 						<option value="favorites">Favoritos</option>
 					</select>
-					<button id="randomBtn" class="btn">Poema al azar</button>
+					<button id="randomBtn" class="btn" type="button">Poema al azar</button>
 				</div>
 			</section>
+
+			<section id="tagFilters" class="tag-filters" aria-label="Filtrar por categoría"></section>
 
 			<section id="poemList" class="grid" aria-live="polite" aria-busy="true"></section>
 		</main>
 
-		<dialog id="poemModal" class="modal">
-			<form method="dialog" class="modal-card" id="poemModalCard">
-				<header class="modal-header">
-					<div class="title-wrap">
-						<h2 id="modalTitle">Título</h2>
-						<p class="muted" id="modalMeta">Autor</p>
-					</div>
-					<div class="modal-actions">
-						<button class="icon ghost close-btn" value="cancel" aria-label="Cerrar">✕</button>
-					</div>
-				</header>
-
-				<div class="modal-body">
-					<pre id="modalContent" tabindex="0"></pre>
-				</div>
-
-				<footer class="modal-footer">
-					<div class="left">
-						<button id="favBtn" type="button" class="btn">❤️ Favorito</button>
-						<button id="copyBtn" type="button" class="btn ghost">Copiar</button>
-						<button id="shareBtn" type="button" class="btn ghost">Compartir</button>
-					</div>
-					<div class="nav">
-						<button id="prevBtn" type="button" class="icon ghost" aria-label="Anterior">←</button>
-						<button id="nextBtn" type="button" class="icon ghost" aria-label="Siguiente">→</button>
-					</div>
-					<button class="btn primary close-btn" value="cancel">Cerrar</button>
-				</footer>
-			</form>
-		</dialog>
-
 		<template id="poemCardTpl">
 			<article class="card">
-				<div class="card-head">
-					<h3 class="card-title"></h3>
-					<button
-						class="fav-toggle"
-						title="Marcar como favorito"
-						aria-label="Marcar como favorito"
-						aria-pressed="false"
-					>
-						🤍
-					</button>
-				</div>
-				<p class="card-meta"></p>
-				<div class="card-actions">
-					<button class="btn small" data-action="open">Leer</button>
-					<button class="btn small ghost" data-action="copy">Copiar</button>
+				<div class="card-inner">
+					<div class="card-face card-front">
+						<div class="card-head">
+							<h2 class="card-title"></h2>
+							<button
+								class="fav-toggle"
+								type="button"
+								title="Marcar como favorito"
+								aria-label="Marcar como favorito"
+								aria-pressed="false"
+							>
+								♡
+							</button>
+						</div>
+						<p class="card-meta"></p>
+						<div class="card-actions">
+							<button class="btn small" type="button" data-action="open">Leer</button>
+							<button class="btn small ghost" type="button" data-action="copy">Copiar</button>
+						</div>
+					</div>
+					<p class="card-face card-preview"></p>
 				</div>
 			</article>
 		</template>
 
-		<section class="update-info">
-			<p>📅 Proxima publicacion: Cada sábado se publica nuevo contenido.</p>
+		<section class="update-info container">
+			<p>Próxima publicación: cada sábado se publica nuevo contenido.</p>
 		</section>
 
 		<footer class="container footer">
-			<small class="muted">&copy; 2026 Literalia. Todos los derechos reservados.</small>
+			<a href="index.html">Literalia</a>
+			<span>&copy; 2026</span>
+			<a href="contacto.html">Contacto</a>
 		</footer>
 
 		<script src="app.js" type="module"></script>
